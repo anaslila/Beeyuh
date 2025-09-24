@@ -3,197 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon - Fashion Forward</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, #f0f8ff, #e6e6fa); /* Light pastel background */
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-            text-align: center;
-        }
-
-        .container {
-            position: relative;
-            z-index: 2;
-            padding: 20px;
-            max-width: 800px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            font-size: 3.5em;
-            color: #5d3fd3; /* Purple accent */
-            margin-bottom: 0.2em;
-            animation: fadeInDown 1.5s ease-out;
-        }
-
-        p {
-            font-size: 1.2em;
-            margin-top: 0;
-            color: #555;
-            animation: fadeInUp 1.5s ease-out 0.5s forwards;
-            opacity: 0;
-        }
-
-        .cta {
-            margin-top: 30px;
-            font-size: 1.1em;
-            animation: fadeInUp 1.5s ease-out 1s forwards;
-            opacity: 0;
-        }
-
-        .cta a {
-            display: inline-block;
-            background-color: #ff69b4; /* Hot pink */
-            color: white;
-            padding: 12px 25px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .cta a:hover {
-            background-color: #e64a9b;
-            transform: translateY(-3px);
-        }
-
-        .animation-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .person {
-            position: absolute;
-            bottom: -50px; /* Start off-screen */
-            width: 100px; /* Adjust size as needed */
-            height: 100px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            animation: walk linear infinite;
-        }
-
-        /* Example person styles - you'd use your actual vector images here */
-        .person.p1 {
-            left: 0;
-            background-image: url('https://i.postimg.cc/GtsSMnZX/BE-YUH.png'); /* Placeholder image for a person */
-            animation-duration: 15s;
-            animation-delay: 0s;
-        }
-
-        .person.p2 {
-            left: 20%;
-            background-image: url('https://i.postimg.cc/GtsSMnZX/BE-YUH.png'); /* Placeholder image for another person */
-            animation-duration: 18s;
-            animation-delay: 3s;
-            transform: scaleX(-1); /* Flip horizontally for variety */
-        }
-
-        .person.p3 {
-            left: 50%;
-            background-image: url('https://i.postimg.cc/GtsSMnZX/BE-YUH.png'); /* Placeholder image */
-            animation-duration: 20s;
-            animation-delay: 6s;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes walk {
-            0% {
-                transform: translateX(-100vw); /* Start far left */
-            }
-            100% {
-                transform: translateX(100vw); /* End far right */
-            }
-        }
-
-        /* You might need more specific keyframes for left-to-right or right-to-left */
-        /* For different directions, you'd need separate person classes and animation */
-        .person.p-rtl {
-            animation: walk-rtl linear infinite;
-        }
-        @keyframes walk-rtl {
-            0% {
-                transform: translateX(100vw); /* Start far right */
-            }
-            100% {
-                transform: translateX(-100vw); /* End far left */
-            }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5em;
-            }
-            p {
-                font-size: 1em;
-            }
-            .person {
-                width: 70px;
-                height: 70px;
-            }
-        }
-    </style>
+    <title>BEEYUH - Own Your Mark</title>
+    <link rel="icon" href="https://i.postimg.cc/GtsSMnZX/BE-YUH.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="animation-wrapper">
-        <!-- These are placeholder divs. You would use actual SVG or image elements with your vector people here. -->
-        <!-- The background-image property in CSS is currently pointing to the image you provided.
-             For a true "vector people walking" effect, you'd want to replace this with SVGs or
-             a spritesheet if you have complex walk cycles. -->
-        <div class="person p1"></div>
-        <div class="person p2"></div>
-        <div class="person p3"></div>
-        <!-- Add more .person elements with different classes and animation properties for more variety -->
-    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="https://i.postimg.cc/GtsSMnZX/BE-YUH.png" alt="BEEYUH Logo">
+                <span>BEEYUH</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link">Shop</a>
+                <a href="#" class="nav-link">New Arrivals</a>
+                <a href="#" class="nav-link">Collections</a>
+                <a href="#" class="nav-link">About</a>
+                <a href="#" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-icons">
+                <i class="fas fa-search"></i>
+                <i class="fas fa-user"></i>
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+        </div>
+    </nav>
 
-    <div class="container">
-        <h1>Fashion Forward <br> is Coming Soon!</h1>
-        <p>Get ready for the ultimate style destination. We're curating the trendiest collections just for you.</p>
-        <p class="cta">Stay tuned for our grand launch!<br>
-        <a href="#newsletter">Join Our Waitlist</a></p>
-    </div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="gradient-overlay"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="coming-soon-container">
+                <div class="brand-title">
+                    <h1 class="brand-name">BEEYUH</h1>
+                    <p class="brand-tagline">Own Your Mark</p>
+                </div>
+                
+                <div class="coming-soon-text">
+                    <h2>COMING SOON</h2>
+                    <p class="launch-text">Something extraordinary is on its way</p>
+                </div>
 
-    <!-- For the "Join Our Waitlist" functionality, you'd integrate a form here
-         and potentially connect it to a backend service like Mailchimp or a simple email collector. -->
+                <!-- Animated Vector Illustrations -->
+                <div class="vector-animations">
+                    <!-- Shopping Person -->
+                    <div class="vector-item shopping-person">
+                        <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                            <circle cx="40" cy="25" r="8" fill="#000" class="head"/>
+                            <rect x="35" y="35" width="10" height="25" fill="#000" class="body"/>
+                            <rect x="32" y="45" width="16" height="3" fill="#000" class="arms"/>
+                            <rect x="37" y="60" width="3" height="15" fill="#000" class="leg1"/>
+                            <rect x="40" y="60" width="3" height="15" fill="#000" class="leg2"/>
+                            <rect x="50" y="40" width="8" height="6" fill="#000" class="bag"/>
+                            <line x1="48" y1="40" x2="45" y2="45" stroke="#000" stroke-width="2" class="bag-handle"/>
+                        </svg>
+                    </div>
 
+                    <!-- Car -->
+                    <div class="vector-item car">
+                        <svg width="100" height="60" viewBox="0 0 100 60" fill="none">
+                            <rect x="10" y="25" width="60" height="20" rx="8" fill="#000" class="car-body"/>
+                            <rect x="20" y="15" width="15" height="10" rx="3" fill="#000" class="car-window1"/>
+                            <rect x="45" y="15" width="15" height="10" rx="3" fill="#000" class="car-window2"/>
+                            <circle cx="25" cy="50" r="6" fill="#000" class="wheel1"/>
+                            <circle cx="55" cy="50" r="6" fill="#000" class="wheel2"/>
+                        </svg>
+                    </div>
+
+                    <!-- Shopping Mall -->
+                    <div class="vector-item mall">
+                        <svg width="140" height="100" viewBox="0 0 140 100" fill="none">
+                            <rect x="20" y="40" width="100" height="40" fill="#000" class="mall-base"/>
+                            <rect x="30" y="30" width="15" height="20" fill="#000" class="mall-section1"/>
+                            <rect x="50" y="25" width="15" height="25" fill="#000" class="mall-section2"/>
+                            <rect x="70" y="30" width="15" height="20" fill="#000" class="mall-section3"/>
+                            <rect x="90" y="35" width="15" height="15" fill="#000" class="mall-section4"/>
+                            <rect x="60" y="60" width="8" height="12" fill="#fff" class="door"/>
+                            <rect x="40" y="50" width="6" height="8" fill="#fff" class="window1"/>
+                            <rect x="80" y="50" width="6" height="8" fill="#fff" class="window2"/>
+                        </svg>
+                    </div>
+
+                    <!-- Fashion Items -->
+                    <div class="vector-item fashion-items">
+                        <svg width="80" height="100" viewBox="0 0 80 100" fill="none">
+                            <!-- Dress -->
+                            <path d="M30 20 L50 20 L55 40 L55 80 L25 80 L25 40 Z" fill="#000" class="dress"/>
+                            <rect x="35" y="15" width="10" height="8" rx="2" fill="#000" class="dress-top"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Email Subscription -->
+                <div class="email-subscription">
+                    <h3>Be the first to know</h3>
+                    <div class="email-form">
+                        <input type="email" placeholder="Enter your email address" class="email-input">
+                        <button type="submit" class="subscribe-btn">Notify Me</button>
+                    </div>
+                </div>
+
+                <!-- Social Links -->
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Elements -->
+        <div class="floating-elements">
+            <div class="floating-element element-1">
+                <i class="fas fa-tshirt"></i>
+            </div>
+            <div class="floating-element element-2">
+                <i class="fas fa-gem"></i>
+            </div>
+            <div class="floating-element element-3">
+                <i class="fas fa-crown"></i>
+            </div>
+            <div class="floating-element element-4">
+                <i class="fas fa-star"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Preview -->
+    <section class="features-preview">
+        <div class="features-container">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <h4>Express Delivery</h4>
+                <p>Fast & reliable shipping</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-medal"></i>
+                </div>
+                <h4>Premium Quality</h4>
+                <p>Crafted to perfection</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h4>Curated Style</h4>
+                <p>Uniquely designed</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 BEEYUH. All rights reserved.</p>
+            <p>Own Your Mark</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
