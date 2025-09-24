@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon - Fashion Forward</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f0f8ff, #e6e6fa); /* Light pastel background */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 3.5em;
+            color: #5d3fd3; /* Purple accent */
+            margin-bottom: 0.2em;
+            animation: fadeInDown 1.5s ease-out;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-top: 0;
+            color: #555;
+            animation: fadeInUp 1.5s ease-out 0.5s forwards;
+            opacity: 0;
+        }
+
+        .cta {
+            margin-top: 30px;
+            font-size: 1.1em;
+            animation: fadeInUp 1.5s ease-out 1s forwards;
+            opacity: 0;
+        }
+
+        .cta a {
+            display: inline-block;
+            background-color: #ff69b4; /* Hot pink */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .cta a:hover {
+            background-color: #e64a9b;
+            transform: translateY(-3px);
+        }
+
+        .animation-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .person {
+            position: absolute;
+            bottom: -50px; /* Start off-screen */
+            width: 100px; /* Adjust size as needed */
+            height: 100px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: walk linear infinite;
+        }
+
+        /* Example person styles - you'd use your actual vector images here */
+        .person.p1 {
+            left: 0;
+            background-image: url('https://i.postimg.cc/GtsSMnZX/BE-YUH.png'); /* Placeholder image for a person */
+            animation-duration: 15s;
+            animation-delay: 0s;
+        }
+
+        .person.p2 {
+            left: 20%;
+            background-image: url('https://i.postimg.cc/GtsSMnZX/BE-YUH.png'); /* Placeholder image for another person */
+            animation-duration: 18s;
+            animation-delay: 3s;
+            transform: scaleX(-1); /* Flip horizontally for variety */
+        }
+
+        .person.p3 {
+            left: 50%;
+            background-image: url('https://i.postimg.cc/GtsSMnZX/BE-YUH.png'); /* Placeholder image */
+            animation-duration: 20s;
+            animation-delay: 6s;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes walk {
+            0% {
+                transform: translateX(-100vw); /* Start far left */
+            }
+            100% {
+                transform: translateX(100vw); /* End far right */
+            }
+        }
+
+        /* You might need more specific keyframes for left-to-right or right-to-left */
+        /* For different directions, you'd need separate person classes and animation */
+        .person.p-rtl {
+            animation: walk-rtl linear infinite;
+        }
+        @keyframes walk-rtl {
+            0% {
+                transform: translateX(100vw); /* Start far right */
+            }
+            100% {
+                transform: translateX(-100vw); /* End far left */
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            p {
+                font-size: 1em;
+            }
+            .person {
+                width: 70px;
+                height: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animation-wrapper">
+        <!-- These are placeholder divs. You would use actual SVG or image elements with your vector people here. -->
+        <!-- The background-image property in CSS is currently pointing to the image you provided.
+             For a true "vector people walking" effect, you'd want to replace this with SVGs or
+             a spritesheet if you have complex walk cycles. -->
+        <div class="person p1"></div>
+        <div class="person p2"></div>
+        <div class="person p3"></div>
+        <!-- Add more .person elements with different classes and animation properties for more variety -->
+    </div>
+
+    <div class="container">
+        <h1>Fashion Forward <br> is Coming Soon!</h1>
+        <p>Get ready for the ultimate style destination. We're curating the trendiest collections just for you.</p>
+        <p class="cta">Stay tuned for our grand launch!<br>
+        <a href="#newsletter">Join Our Waitlist</a></p>
+    </div>
+
+    <!-- For the "Join Our Waitlist" functionality, you'd integrate a form here
+         and potentially connect it to a backend service like Mailchimp or a simple email collector. -->
+
+</body>
+</html>
