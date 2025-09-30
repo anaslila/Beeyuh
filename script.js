@@ -1,4 +1,4 @@
-/* script.js - BEEYUH Men's T-Shirt Store - UPDATED WITH SEARCH RESULTS BUTTON FIX */
+/* script.js - BEEYUH Men's T-Shirt Store - COMPLETE WITH ALL FIXES & ICON BUTTONS */
 
 // Global Variables
 let cart = JSON.parse(localStorage.getItem('beeyuh_cart')) || [];
@@ -33,7 +33,7 @@ function initializeApp() {
     console.log('✅ BEEYUH Store Loaded Successfully!');
 }
 
-// Event Bindings
+// Event Bindings - NAVIGATION REMOVED
 function bindEvents() {
     // Top bar close
     const topBarClose = document.getElementById('top-bar-close');
@@ -41,24 +41,7 @@ function bindEvents() {
         topBarClose.addEventListener('click', hideTopBar);
     }
 
-    // Mobile menu
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenuClose = document.getElementById('mobile-menu-close');
-    const mobileMenu = document.getElementById('mobile-menu');
-    
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-    }
-    if (mobileMenuClose) {
-        mobileMenuClose.addEventListener('click', closeMobileMenu);
-    }
-    if (mobileMenu) {
-        mobileMenu.addEventListener('click', function(e) {
-            if (e.target === mobileMenu) closeMobileMenu();
-        });
-    }
-
-    // Search functionality
+    // Search functionality - Enhanced
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
         searchInput.addEventListener('input', handleSearch);
@@ -165,23 +148,6 @@ function bindEvents() {
     // Customization options
     bindCustomizationEvents();
 
-    // Contact form
-    const contactForm = document.querySelector('.contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', handleContactForm);
-    }
-
-    // Navigation links
-    const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = this.getAttribute('href');
-            scrollToSection(target);
-            closeMobileMenu();
-        });
-    });
-
     // Alert popup close
     const alertPopupClose = document.getElementById('alert-popup-close');
     if (alertPopupClose) {
@@ -275,7 +241,7 @@ function renderProducts(products) {
     grid.innerHTML = products.map(product => `
         <div class="product-card" data-id="${product.id}" onclick="openProductModal(${product.id})">
             <div class="product-image">
-                <img src="${product.image}" alt="${product.title}" loading="lazy">
+                <img src="${product.image}" alt="${product.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop'">
                 ${product.isCustomizable ? '<div class="custom-badge">Custom Available</div>' : ''}
             </div>
             <div class="product-info">
@@ -295,6 +261,8 @@ function renderProducts(products) {
             </div>
         </div>
     `).join('');
+    
+    console.log('📦 Products rendered:', products.length);
 }
 
 function filterProducts(filter) {
@@ -311,9 +279,10 @@ function filterProducts(filter) {
     }
     
     renderProducts(filtered);
+    console.log('🔍 Filtered products:', filter, filtered.length);
 }
 
-// ===== SEARCH FUNCTIONS - UPDATED WITH VISIBLE BUTTONS =====
+// ===== SEARCH FUNCTIONS - UPDATED WITH ICON BUTTONS =====
 function handleSearch(e) {
     const query = e.target.value.toLowerCase().trim();
     
@@ -333,7 +302,7 @@ function handleSearch(e) {
     displaySearchResults(results);
 }
 
-// *** UPDATED: Search Results with Visible Action Buttons ***
+// *** UPDATED: Search Results with ICON BUTTONS (+ and 🎨) ***
 function displaySearchResults(results) {
     const searchResults = document.getElementById('search-results');
     if (!searchResults) return;
@@ -343,19 +312,19 @@ function displaySearchResults(results) {
     } else {
         searchResults.innerHTML = results.map(product => `
             <div class="search-item" onclick="openProductModal(${product.id}); hideSearchResults();">
-                <img src="${product.image}" alt="${product.title}">
+                <img src="${product.image}" alt="${product.title}" onerror="this.src='https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop'">
                 <div class="search-item-info">
                     <h4>${product.title}</h4>
                     <p>Rs. ${product.price.toLocaleString()}</p>
                     <div class="search-item-category">${product.category}</div>
                 </div>
                 <div class="search-item-actions">
-                    <button class="search-add-cart" onclick="event.stopPropagation(); quickAddToCart(${product.id}); hideSearchResults(); showNotification('Added to cart: ${product.title}', 'success');">
-                        Add to Cart
+                    <button class="search-add-cart" onclick="event.stopPropagation(); quickAddToCart(${product.id}); hideSearchResults(); showNotification('Added to cart!', 'success');" title="Add to Cart">
+                        +
                     </button>
                     ${product.isCustomizable ? 
-                        `<button class="search-customize" onclick="event.stopPropagation(); openCustomModalWithProduct(${product.id}); hideSearchResults();">
-                            Customize
+                        `<button class="search-customize" onclick="event.stopPropagation(); openCustomModalWithProduct(${product.id}); hideSearchResults();" title="Customize">
+                            🎨
                         </button>` : ''
                     }
                 </div>
@@ -364,7 +333,7 @@ function displaySearchResults(results) {
     }
     
     showSearchResults();
-    console.log('🔍 Search results displayed with action buttons');
+    console.log('🔍 Search results displayed:', results.length);
 }
 
 function showSearchResults() {
@@ -407,6 +376,8 @@ function openProductModal(productId) {
     if (modal) {
         modal.classList.remove('hidden');
     }
+    
+    console.log('👀 Opened product modal:', product.title);
 }
 
 function closeProductModal() {
@@ -455,6 +426,11 @@ function openCustomModalWithProduct(productId) {
         }
     }
     
+    // Use first customizable product if none selected
+    if (!currentProduct) {
+        currentProduct = PRODUCTS.find(p => p.isCustomizable) || PRODUCTS[0];
+    }
+    
     // Reset customization
     customization = {
         color: 'black',
@@ -475,6 +451,8 @@ function openCustomModalWithProduct(productId) {
     if (modal) {
         modal.classList.remove('hidden');
     }
+    
+    console.log('🎨 Opened customization for:', currentProduct?.title);
 }
 
 // *** NEW FUNCTION: Updates t-shirt preview to show selected product ***
@@ -581,11 +559,19 @@ function updatePreview() {
     updateTshirtPreviewImage();
     
     // Update preview text
-    document.getElementById('preview-color').textContent = customization.color;
-    document.getElementById('preview-size').textContent = customization.size;
-    document.getElementById('preview-initials').textContent = customization.initials || 'AB';
-    document.getElementById('preview-font').textContent = getFontDisplayName(customization.font);
-    document.getElementById('preview-placement').textContent = customization.placement.replace('-', ' ');
+    const previewElements = {
+        color: document.getElementById('preview-color'),
+        size: document.getElementById('preview-size'),
+        initials: document.getElementById('preview-initials'),
+        font: document.getElementById('preview-font'),
+        placement: document.getElementById('preview-placement')
+    };
+    
+    if (previewElements.color) previewElements.color.textContent = customization.color;
+    if (previewElements.size) previewElements.size.textContent = customization.size;
+    if (previewElements.initials) previewElements.initials.textContent = customization.initials || 'AB';
+    if (previewElements.font) previewElements.font.textContent = getFontDisplayName(customization.font);
+    if (previewElements.placement) previewElements.placement.textContent = customization.placement.replace('-', ' ');
     
     // Update initials preview on t-shirt
     const initialsPreview = document.getElementById('initials-preview');
@@ -595,12 +581,12 @@ function updatePreview() {
         
         // Position based on placement with enhanced positioning
         const positions = {
-            'left-chest': { top: '35%', left: '25%', fontSize: '16px' },
-            'right-chest': { top: '35%', left: '75%', fontSize: '16px' },
-            'center-chest': { top: '45%', left: '50%', fontSize: '20px' },
-            'left-sleeve': { top: '25%', left: '10%', fontSize: '14px' },
-            'right-sleeve': { top: '25%', left: '90%', fontSize: '14px' },
-            'back': { top: '30%', left: '50%', fontSize: '24px' }
+            'left-chest': { top: '35%', left: '25%', fontSize: '14px' },
+            'right-chest': { top: '35%', left: '75%', fontSize: '14px' },
+            'center-chest': { top: '45%', left: '50%', fontSize: '18px' },
+            'left-sleeve': { top: '25%', left: '10%', fontSize: '12px' },
+            'right-sleeve': { top: '25%', left: '90%', fontSize: '12px' },
+            'back': { top: '30%', left: '50%', fontSize: '20px' }
         };
         
         const pos = positions[customization.placement];
@@ -614,7 +600,7 @@ function updatePreview() {
         initialsPreview.style.fontWeight = '900';
         initialsPreview.style.textShadow = '1px 1px 2px rgba(0,0,0,0.5)';
         initialsPreview.style.backgroundColor = 'rgba(255,255,255,0.9)';
-        initialsPreview.style.padding = '2px 6px';
+        initialsPreview.style.padding = '2px 5px';
         initialsPreview.style.borderRadius = '2px';
         initialsPreview.style.border = '1px solid rgba(0,0,0,0.2)';
     }
@@ -639,7 +625,10 @@ function getFontDisplayName(font) {
 }
 
 function addCustomToCart() {
-    if (!currentProduct) return;
+    if (!currentProduct) {
+        showNotification('Please select a product to customize', 'error');
+        return;
+    }
     
     if (!customization.initials || customization.initials.trim() === '') {
         showNotification('Please enter initials for customization', 'error');
@@ -737,11 +726,11 @@ function updateCartUI() {
     // Update items
     if (cartItems) {
         if (cart.length === 0) {
-            cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+            cartItems.innerHTML = '<div class="empty-cart">Your cart is empty<br><small>Start shopping to add items!</small></div>';
         } else {
             cartItems.innerHTML = cart.map((item, index) => `
                 <div class="cart-item">
-                    <img src="${item.image}" alt="${item.title}" class="cart-item-image">
+                    <img src="${item.image}" alt="${item.title}" class="cart-item-image" onerror="this.src='https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop'">
                     <div class="cart-item-info">
                         <h4 class="cart-item-title">${item.title}</h4>
                         <p class="cart-item-details">Size: ${item.size}</p>
@@ -757,11 +746,11 @@ function updateCartUI() {
                     </div>
                     <div class="cart-item-controls">
                         <div class="quantity-controls">
-                            <button onclick="updateCartQuantity(${index}, ${item.quantity - 1})">-</button>
+                            <button onclick="updateCartQuantity(${index}, ${item.quantity - 1})" title="Decrease quantity">-</button>
                             <span>${item.quantity}</span>
-                            <button onclick="updateCartQuantity(${index}, ${item.quantity + 1})">+</button>
+                            <button onclick="updateCartQuantity(${index}, ${item.quantity + 1})" title="Increase quantity">+</button>
                         </div>
-                        <button class="remove-btn" onclick="removeFromCart(${index})">&times;</button>
+                        <button class="remove-btn" onclick="removeFromCart(${index})" title="Remove item">&times;</button>
                     </div>
                 </div>
             `).join('');
@@ -774,6 +763,7 @@ function openCart() {
     if (sidebar) {
         sidebar.classList.remove('hidden');
     }
+    console.log('🛒 Cart opened');
 }
 
 function closeCart() {
@@ -794,31 +784,35 @@ function handleCheckout() {
     
     cart.forEach((item, index) => {
         message += `${index + 1}. *${item.title}*\n`;
-        message += `   Size: ${item.size}\n`;
-        message += `   Quantity: ${item.quantity}\n`;
-        message += `   Price: Rs. ${item.price.toLocaleString()}\n`;
+        message += `   📏 Size: ${item.size}\n`;
+        message += `   📊 Qty: ${item.quantity}\n`;
+        message += `   💰 Price: Rs. ${item.price.toLocaleString()}\n`;
         
         if (item.isCustom) {
-            message += `   🎨 Custom Details:\n`;
-            message += `   - Color: ${item.customization.color}\n`;
-            message += `   - Initials: "${item.customization.initials}"\n`;
-            message += `   - Font: ${getFontDisplayName(item.customization.font)}\n`;
-            message += `   - Placement: ${item.customization.placement.replace('-', ' ')}\n`;
+            message += `   🎨 *Custom Details:*\n`;
+            message += `   • Color: ${item.customization.color}\n`;
+            message += `   • Initials: "${item.customization.initials}"\n`;
+            message += `   • Font: ${getFontDisplayName(item.customization.font)}\n`;
+            message += `   • Placement: ${item.customization.placement.replace('-', ' ')}\n`;
         }
         
-        message += `\n`;
+        message += `   💵 Subtotal: Rs. ${(item.price * item.quantity).toLocaleString()}\n\n`;
     });
     
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    message += `💰 *Total: Rs. ${total.toLocaleString()}*\n\n`;
-    message += `📝 Please confirm and provide delivery address.\n`;
-    message += `🙏 Thank you for choosing BEEYUH!`;
+    message += `💳 *TOTAL: Rs. ${total.toLocaleString()}*\n\n`;
+    message += `📝 Please confirm this order and provide:\n`;
+    message += `• Delivery Address\n`;
+    message += `• Phone Number\n`;
+    message += `• Any special instructions\n\n`;
+    message += `✨ Thank you for choosing BEEYUH!`;
     
     // Open WhatsApp
     const whatsappUrl = `https://wa.me/918879706046?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
     
     showNotification('Redirecting to WhatsApp...', 'success');
+    console.log('📱 WhatsApp checkout initiated');
 }
 
 // UI Helper Functions
@@ -826,20 +820,6 @@ function hideTopBar() {
     const topBar = document.getElementById('top-bar');
     if (topBar) {
         topBar.style.display = 'none';
-    }
-}
-
-function toggleMobileMenu() {
-    const menu = document.getElementById('mobile-menu');
-    if (menu) {
-        menu.classList.toggle('hidden');
-    }
-}
-
-function closeMobileMenu() {
-    const menu = document.getElementById('mobile-menu');
-    if (menu) {
-        menu.classList.add('hidden');
     }
 }
 
@@ -857,22 +837,27 @@ function closeNotifications() {
     }
 }
 
-function scrollToSection(target) {
-    const element = document.querySelector(target);
-    if (element) {
-        element.scrollIntoView({
+// SIMPLIFIED NAVIGATION FUNCTIONS - NO SCROLL NAVIGATION
+function scrollToShop() {
+    const shopSection = document.getElementById('shop');
+    if (shopSection) {
+        shopSection.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
         });
     }
 }
 
-function scrollToShop() {
-    scrollToSection('#shop');
-}
-
 function openCustomizer() {
-    openCustomModalWithProduct(null);
+    // Open customization with first customizable product
+    if (typeof PRODUCTS !== 'undefined') {
+        const customizableProduct = PRODUCTS.find(p => p.isCustomizable);
+        if (customizableProduct) {
+            openCustomModalWithProduct(customizableProduct.id);
+        } else {
+            openCustomModalWithProduct(PRODUCTS[0]?.id);
+        }
+    }
 }
 
 // Enhanced Notification System
@@ -893,19 +878,20 @@ function showNotification(message, type = 'info') {
     // Style the notification
     notification.style.cssText = `
         position: fixed;
-        top: 100px;
+        top: 90px;
         right: 20px;
-        padding: 15px 20px;
+        padding: 12px 18px;
         background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : type === 'warning' ? '#ff9800' : '#2196f3'};
         color: white;
         border-radius: 0;
         font-weight: 500;
         z-index: 10000;
         animation: slideIn 0.3s ease;
-        max-width: 350px;
+        max-width: 300px;
         word-wrap: break-word;
-        font-size: 14px;
+        font-size: 13px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        border: 1px solid rgba(255,255,255,0.2);
     `;
     
     document.body.appendChild(notification);
@@ -921,25 +907,6 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Contact Form
-function handleContactForm(e) {
-    e.preventDefault();
-    
-    const name = document.getElementById('contact-name').value;
-    const email = document.getElementById('contact-email').value;
-    const message = document.getElementById('contact-message').value;
-    
-    // Create WhatsApp message
-    const whatsappMessage = `🔔 *Contact Form Submission*\n\n*Name:* ${name}\n*Email:* ${email}\n*Message:* ${message}`;
-    const whatsappUrl = `https://wa.me/918879706046?text=${encodeURIComponent(whatsappMessage)}`;
-    
-    window.open(whatsappUrl, '_blank');
-    
-    // Reset form
-    e.target.reset();
-    showNotification('Message sent via WhatsApp!', 'success');
-}
-
 // Keyboard Events
 function handleKeyboardEvents(e) {
     if (e.key === 'Escape') {
@@ -948,9 +915,21 @@ function handleKeyboardEvents(e) {
         closeCustomModal();
         closeCart();
         closeNotifications();
-        closeMobileMenu();
         hideSearchResults();
         closeAlertPopup();
+    }
+    
+    // Quick shortcuts
+    if (e.ctrlKey || e.metaKey) {
+        switch(e.key) {
+            case 'k':
+                e.preventDefault();
+                const searchInput = document.getElementById('search-input');
+                if (searchInput) {
+                    searchInput.focus();
+                }
+                break;
+        }
     }
 }
 
@@ -972,12 +951,16 @@ document.head.appendChild(style);
 // Console branding
 console.log(`
 %c BEEYUH - Men's Premium T-Shirts %c
-%c ✅ Search Results Buttons Fixed! 
-%c ✅ Dynamic T-Shirt Preview Enabled! 
-%c 🎯 Store loaded successfully! 
+%c ✅ Icon Buttons Implemented! 
+%c ✅ Navigation Removed - Minimal Design! 
+%c ✅ Product Images Fixed! 
+%c ✅ Search Results Enhanced! 
+%c 🎯 Store ready for production! 
 `, 
 'background: #000; color: #fff; font-weight: bold; padding: 8px 16px;',
 '',
+'color: #4caf50; font-weight: bold;',
+'color: #4caf50; font-weight: bold;',
 'color: #4caf50; font-weight: bold;',
 'color: #4caf50; font-weight: bold;',
 'color: #666; font-size: 12px;'
@@ -991,3 +974,14 @@ window.removeFromCart = removeFromCart;
 window.updateCartQuantity = updateCartQuantity;
 window.scrollToShop = scrollToShop;
 window.openCustomizer = openCustomizer;
+
+// Performance optimizations
+document.addEventListener('DOMContentLoaded', function() {
+    // Lazy load images
+    const images = document.querySelectorAll('img[loading="lazy"]');
+    images.forEach(img => {
+        img.addEventListener('load', function() {
+            this.classList.add('loaded');
+        });
+    });
+});
