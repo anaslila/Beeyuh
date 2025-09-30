@@ -1,286 +1,146 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Beeyuh — Coming Back Soon</title>
-  <style>
-    :root{
-      --bg:#0f1724;
-      --card:#0b1220;
-      --accent:#ffb86b;
-      --muted:#9aa4b2;
-      --glass: rgba(255,255,255,0.03);
-      --shadow: 0 8px 24px rgba(2,6,23,0.6);
-      --circle: rgba(255,184,107,0.06);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-    html,body{height:100%}
-    body{
-      margin:0;
-      background:
-        radial-gradient(600px 300px at 10% 20%, rgba(255,184,107,0.03), transparent 8%),
-        radial-gradient(500px 250px at 90% 80%, rgba(96,165,250,0.02), transparent 8%),
-        var(--bg);
-      color:#e6eef6;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      padding:28px;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Site Down — Come Back Later</title>
+<style>
+  :root{
+    --bg:#0f1724; --card:#0b1220; --accent:#ffcb05; --muted:#9aa7b2;
+    --glass: rgba(255,255,255,0.03);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    display:flex;align-items:center;justify-content:center;
+    background:
+      radial-gradient(800px 400px at 10% 10%, rgba(255,203,5,0.04), transparent 8%),
+      linear-gradient(180deg, #071026 0%, #071423 100%);
+    color:#e6eef6;
+    padding:28px;
+  }
 
-    .card{
-      width:min(780px,96vw);
-      background:linear-gradient(180deg,var(--card), rgba(11,18,32,0.85));
-      border-radius:14px;
-      box-shadow:var(--shadow);
-      padding:28px;
-      display:grid;
-      grid-template-columns: 1fr 280px;
-      gap:22px;
-      align-items:center;
-      overflow:visible;
-      border:1px solid rgba(255,255,255,0.03);
-    }
+  .wrap{
+    width:min(880px,96%); background:linear-gradient(180deg,var(--card), #081022);
+    border-radius:18px; padding:36px; box-shadow:0 10px 40px rgba(2,6,23,0.7);
+    display:grid; grid-template-columns: 1fr 300px; gap:28px; align-items:center;
+  }
 
-    /* Left (message) */
-    .left{
-      padding-right:8px;
-    }
-    h1{
-      margin:0 0 6px 0;
-      font-size:28px;
-      letter-spacing:-0.3px;
-    }
-    p.lead{
-      margin:0 0 18px 0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.45;
-    }
+  .left h1{
+    margin:0 0 6px 0; font-size:24px; letter-spacing:0.6px;
+  }
+  .left p{margin:0 0 18px 0; color:var(--muted); font-size:15px}
+  .big{
+    font-size:34px; margin:0 0 18px 0; color:var(--accent); font-weight:700;
+    text-transform:uppercase; letter-spacing:1px;
+  }
 
-    .icons{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
+  .actions{
+    display:flex; gap:12px; align-items:center;
+  }
+  .btn{
+    background:var(--glass); color:var(--accent);
+    border:1px solid rgba(255,255,255,0.03);
+    padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600;
+    backdrop-filter: blur(6px);
+  }
+  .btn.secondary{color:#cfe3ff; background:transparent; border:1px dashed rgba(255,255,255,0.03)}
+  .note{font-size:13px; color:var(--muted); margin-top:12px}
 
-    .icon-box{
-      width:64px;
-      height:64px;
-      border-radius:10px;
-      background:var(--glass);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow: 0 6px 18px rgba(2,6,23,0.45);
-      backdrop-filter: blur(6px);
-      transform-origin:center;
-      animation:float 3s ease-in-out infinite;
-    }
-    .icon-box:nth-child(2){ animation-delay: 0.15s }
-    .icon-box:nth-child(3){ animation-delay: 0.3s }
-    .icon-box:nth-child(4){ animation-delay: 0.45s }
-    @keyframes float{
-      0% { transform: translateY(0) }
-      50% { transform: translateY(-8px) rotate(-2deg) }
-      100% { transform: translateY(0) }
-    }
+  /* right column visual */
+  .visual{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border-radius:12px; padding:18px; display:flex; gap:12px; justify-content:center; align-items:center;
+    position:relative; overflow:hidden;
+  }
+  .icon {
+    width:72px; height:72px; padding:10px; background:rgba(255,255,255,0.02);
+    border-radius:12px; display:flex; align-items:center; justify-content:center;
+    transform:translateY(0); animation:float 4s ease-in-out infinite;
+    box-shadow:0 6px 20px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  }
+  .icon:nth-child(2){animation-delay:0.6s; transform:translateY(6px) scale(0.98)}
+  .icon:nth-child(3){animation-delay:1.1s; transform:translateY(-6px) scale(1.02)}
+  .icon svg{width:44px;height:44px;display:block}
 
-    .right{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      position:relative;
-    }
+  @keyframes float{
+    0%{transform:translateY(0) rotate(-2deg)}
+    50%{transform:translateY(-12px) rotate(2deg)}
+    100%{transform:translateY(0) rotate(-2deg)}
+  }
 
-    .status{
-      width:100%;
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:10px;
-      padding:18px;
-      text-align:center;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
-    }
+  .small-txt{font-size:12px;color:var(--muted); margin-top:8px; text-align:center}
 
-    .badge{
-      display:inline-block;
-      padding:8px 12px;
-      background:var(--circle);
-      color:var(--accent);
-      border-radius:999px;
-      font-weight:600;
-      font-size:13px;
-      margin-bottom:12px;
-    }
-
-    .status h2{
-      margin:6px 0 6px 0;
-      font-size:18px;
-    }
-    .status p{
-      margin:0 0 12px 0;
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .cta{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      background:linear-gradient(90deg,var(--accent), #ff9d48);
-      color:#082028;
-      padding:10px 14px;
-      border-radius:10px;
-      font-weight:700;
-      box-shadow: 0 8px 30px rgba(255,184,107,0.12);
-      cursor:default;
-      user-select:none;
-    }
-
-    .spinner{
-      width:18px;
-      height:18px;
-      border-radius:50%;
-      border:2px solid rgba(0,0,0,0.12);
-      border-top-color: rgba(0,0,0,0.25);
-      animation:spin 1s linear infinite;
-    }
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* footer small text */
-    .meta{
-      margin-top:12px;
-      font-size:12px;
-      color:var(--muted);
-      display:flex;
-      justify-content:space-between;
-      gap:8px;
-      align-items:center;
-    }
-
-    /* responsive */
-    @media (max-width:760px){
-      .card{ grid-template-columns: 1fr; text-align:center }
-      .left{ padding-right:0 }
-      .icons{ justify-content:center }
-    }
-
-    /* tiny decorative corner */
-    .corner-dots{
-      position:absolute;
-      right:-28px;
-      top:-28px;
-      width:120px;
-      height:120px;
-      pointer-events:none;
-      opacity:0.06;
-      filter: blur(6px);
-    }
-
-    /* small subtle pulse for CTA */
-    .cta{ animation:pulse 3.6s ease-in-out infinite; }
-    @keyframes pulse{
-      0%{ transform: translateY(0) }
-      50%{ transform: translateY(-2px) scale(1.01) }
-      100%{ transform: translateY(0) }
-    }
-
-    /* tiny accessibility focus */
-    a, button { outline-color: rgba(255,184,107,0.18) }
-  </style>
+  /* responsive */
+  @media (max-width:760px){
+    .wrap{grid-template-columns:1fr; padding:22px}
+    .visual{order:-1; margin-bottom:12px}
+  }
+</style>
 </head>
 <body>
-  <main class="card" role="main" aria-labelledby="title">
+  <main class="wrap" role="main" aria-labelledby="title">
     <section class="left">
       <h1 id="title">YOU CAUGHT RIGHT!</h1>
-      <p class="lead">BUT WEBSITE IS DOWN! — we're on it. Come back later and everything will be polished and live again. Meanwhile, take a look around below.</p>
+      <div class="big">BUT WEBSITE IS DOWN</div>
+      <p>We know. Not the best timing. Our team is on it — please come back later. Meanwhile you can refresh, copy this message, or contact support.</p>
 
-      <div class="icons" aria-hidden="false">
-        <!-- T-shirt -->
-        <div class="icon-box" title="T-shirts">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M3 7c0-.828.895-2 2-2h2l1 2 1-1 2-1 2 1 1 1 1-2h2c1.105 0 2 .895 2 2v7a3 3 0 01-3 3h-2a1 1 0 01-1-1v-5H9v5a1 1 0 01-1 1H6a3 3 0 01-3-3V7z" stroke="#fff" stroke-opacity="0.9" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-
-        <!-- Shop / storefront -->
-        <div class="icon-box" title="Store">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M3 7h18v6H3z" stroke="#fff" stroke-opacity="0.92" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M5 7V5a1 1 0 011-1h12a1 1 0 011 1v2" stroke="#fff" stroke-opacity="0.7" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M7 13v6M12 13v6M17 13v6" stroke="#fff" stroke-opacity="0.6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-
-        <!-- Shopping bag -->
-        <div class="icon-box" title="Bag">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 7l1-2h10l1 2" stroke="#fff" stroke-opacity="0.95" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M5 7h14l-1 11a2 2 0 01-2 2H8a2 2 0 01-2-2L5 7z" stroke="#fff" stroke-opacity="0.9" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M9 10a3 3 0 016 0" stroke="#fff" stroke-opacity="0.7" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-
-        <!-- Person -->
-        <div class="icon-box" title="People">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 12a3 3 0 100-6 3 3 0 000 6z" stroke="#fff" stroke-opacity="0.95" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M5 20a6 6 0 0114 0" stroke="#fff" stroke-opacity="0.75" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
+      <div class="actions">
+        <button class="btn" onclick="location.reload()">Try Refresh</button>
+        <button class="btn secondary" onclick="copyMsg()">Copy Message</button>
+        <a class="btn secondary" href="mailto:hello@yourdomain.com?subject=Site%20Down%20Help" style="text-decoration:none;display:inline-flex;align-items:center">Contact Support</a>
       </div>
 
-      <div class="meta" aria-hidden="true">
-        <div>Beeyuh • Coming Soon</div>
-        <div>Need urgent help? WhatsApp: +91 8879706046</div>
-      </div>
+      <div class="note">Tip: Press Ctrl/Cmd+R to force reload. If this keeps happening send us the timestamp and a short description.</div>
     </section>
 
-    <aside class="right" aria-label="Status panel">
-      <div class="status" role="status" aria-live="polite">
-        <div class="badge">Maintenance</div>
-        <h2>We're improving the shop</h2>
-        <p>Quick maintenance is underway. We'll be back shortly with a faster, cleaner experience.</p>
-
-        <div class="cta" aria-hidden="false">
-          <div class="spinner" role="img" aria-label="loading"></div>
-          <div>COME BACK LATER</div>
-        </div>
-
-        <div style="height:8px"></div>
-        <div style="font-size:12px;color:var(--muted)">Estimated downtime: brief — thank you for your patience.</div>
+    <aside class="visual" aria-hidden="true">
+      <div class="icon" title="T-shirt (products)">
+        <!-- T-shirt SVG -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 7l3-2 2 1 2-1 2 1 2-1 3 2v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7z"></path>
+          <path d="M7 8v8"></path>
+          <path d="M17 8v8"></path>
+        </svg>
       </div>
 
-      <!-- Decorative corner -->
-      <svg class="corner-dots" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true">
-        <defs>
-          <linearGradient id="g" x1="0" x2="1">
-            <stop offset="0" stop-color="#ffb86b" stop-opacity="0.18"/>
-            <stop offset="1" stop-color="#60a5fa" stop-opacity="0.06"/>
-          </linearGradient>
-        </defs>
-        <circle cx="30" cy="30" r="22" fill="url(#g)"/>
-        <circle cx="90" cy="60" r="12" fill="url(#g)"/>
-        <circle cx="150" cy="110" r="18" fill="url(#g)"/>
-      </svg>
+      <div class="icon" title="Shop (store)">
+        <!-- Shop SVG -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5L12 4l9 5.5"></path>
+          <path d="M5 22h14a1 1 0 0 0 1-1V10H4v11a1 1 0 0 0 1 1z"></path>
+        </svg>
+      </div>
+
+      <div class="icon" title="Bag (cart)">
+        <!-- Bag SVG -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2h12l1 5H5L6 2z"></path>
+          <path d="M19 7v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7"></path>
+          <path d="M9 11a3 3 0 0 1 6 0"></path>
+        </svg>
+      </div>
+
+      <div class="icon" title="People (users)">
+        <!-- People SVG -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 11a3 3 0 1 0-6 0"></path>
+          <path d="M6 20v-1a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v1"></path>
+        </svg>
+      </div>
     </aside>
   </main>
 
-  <script>
-    // tiny enhancement: update document title with subtle status for tab
-    (function(){
-      var base = document.title;
-      var states = ["Offline", "Maintenance", "Back Soon"];
-      var i = 0;
-      setInterval(function(){
-        document.title = states[i % states.length] + " — " + base;
-        i++;
-      }, 2400);
-    })();
-  </script>
+<script>
+  function copyMsg(){
+    const text = "Site down — come back later. (Sent by website)";
+    navigator.clipboard?.writeText(text).then(()=> {
+      alert("Message copied. Paste where you need.");
+    }).catch(()=> {
+      prompt("Copy this:", text);
+    });
+  }
+</script>
 </body>
 </html>
