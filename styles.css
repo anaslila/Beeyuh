@@ -1,4 +1,4 @@
-/* styles.css - BEEYUH Men's T-Shirt Store - UPDATED WITH MOBILE SEARCH FIX */
+/* styles.css - BEEYUH Men's T-Shirt Store - COMPLETE WITH SEARCH RESULTS BUTTON FIX */
 
 /* CSS Variables */
 :root {
@@ -373,6 +373,7 @@ img {
   justify-content: center;
 }
 
+/* ===== ENHANCED SEARCH RESULTS - WITH VISIBLE ACTION BUTTONS ===== */
 .search-results {
   position: absolute;
   top: 100%;
@@ -384,6 +385,7 @@ img {
   max-height: 400px;
   overflow-y: auto;
   z-index: 1001;
+  box-shadow: 0 8px 25px var(--shadow-dark);
 }
 
 .search-item {
@@ -394,29 +396,106 @@ img {
   border-bottom: 1px solid var(--border-light);
   cursor: pointer;
   transition: var(--transition);
+  background-color: var(--bg-primary);
+  position: relative;
 }
 
 .search-item:hover {
   background-color: var(--bg-secondary);
 }
 
+.search-item:last-child {
+  border-bottom: none;
+}
+
 .search-item img {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
   border: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+.search-item-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .search-item-info h4 {
-  margin: 0;
+  margin: 0 0 4px 0;
   font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .search-item-info p {
   margin: 0;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--accent-color);
+}
+
+.search-item-category {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* *** KEY FIX: Search Item Actions - Now Visible *** */
+.search-item-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.2s ease;
+}
+
+.search-item:hover .search-item-actions {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.search-add-cart,
+.search-customize {
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  border-radius: var(--border-radius);
+}
+
+.search-add-cart:hover {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.search-customize {
+  background: transparent;
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.search-customize:hover {
+  background: var(--accent-color);
+  color: var(--secondary-color);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
 }
 
 .action-btn {
@@ -1406,7 +1485,7 @@ img {
   font-size: 16px;
   font-weight: 900;
   color: var(--primary-color);
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.9);
   padding: 2px 6px;
   border: 1px solid var(--border-color);
   transform: translate(-50%, -50%);
@@ -1618,7 +1697,7 @@ img {
   font-weight: 700;
 }
 
-/* ===== RESPONSIVE DESIGN - MOBILE SEARCH FIX ===== */
+/* ===== RESPONSIVE DESIGN - COMPLETE MOBILE OPTIMIZATION ===== */
 
 @media (max-width: 1200px) {
   .products-grid {
@@ -1645,6 +1724,34 @@ img {
   
   .search-input {
     width: 200px;
+  }
+  
+  .search-results {
+    width: 280px;
+    max-height: 300px;
+  }
+  
+  .search-item {
+    padding: 12px;
+    gap: 12px;
+  }
+  
+  .search-item img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .search-item-info h4 {
+    font-size: 13px;
+  }
+  
+  .search-item-info p {
+    font-size: 12px;
+  }
+  
+  .search-item-actions {
+    opacity: 1; /* Always show on tablet */
+    transform: translateX(0);
   }
   
   .hero-content {
@@ -1710,7 +1817,7 @@ img {
   }
 }
 
-/* ===== MOBILE SEARCH BAR FIX - COMPLETE SOLUTION ===== */
+/* ===== MOBILE SEARCH BAR & RESULTS FIX - COMPLETE SOLUTION ===== */
 @media (max-width: 480px) {
   .container {
     padding: 0 15px;
@@ -1724,7 +1831,7 @@ img {
     flex-wrap: nowrap;
   }
   
-  /* FIXED: Search Container - Now Visible on Mobile */
+  /* FIXED: Search Container - Now Fully Visible on Mobile */
   .search-container {
     display: block !important; /* Force show search on mobile */
     width: 140px;
@@ -1750,6 +1857,50 @@ img {
     bottom: 1px;
   }
   
+  /* FIXED: Search Results - Mobile Responsive */
+  .search-results {
+    left: 0;
+    right: 0;
+    width: 250px;
+    max-height: 200px;
+    font-size: 12px;
+  }
+  
+  .search-item {
+    padding: 10px;
+    gap: 10px;
+  }
+  
+  .search-item img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .search-item-info h4 {
+    font-size: 12px;
+  }
+  
+  .search-item-info p {
+    font-size: 11px;
+  }
+  
+  .search-item-category {
+    font-size: 10px;
+  }
+  
+  /* *** MOBILE SEARCH BUTTONS - Always Visible *** */
+  .search-item-actions {
+    opacity: 1 !important; /* Always show on mobile */
+    transform: translateX(0) !important;
+  }
+  
+  .search-add-cart,
+  .search-customize {
+    padding: 4px 8px;
+    font-size: 10px;
+    border-width: 1px;
+  }
+  
   /* FIXED: Action Buttons - Mobile Optimized */
   .action-btn {
     width: 35px;
@@ -1762,33 +1913,6 @@ img {
     width: 35px;
     height: 35px;
     border-width: 1px;
-  }
-  
-  /* FIXED: Search Results - Mobile Responsive */
-  .search-results {
-    left: 0;
-    right: 0;
-    width: 200px;
-    max-height: 250px;
-    font-size: 12px;
-  }
-  
-  .search-item {
-    padding: 10px;
-    gap: 10px;
-  }
-  
-  .search-item img {
-    width: 35px;
-    height: 35px;
-  }
-  
-  .search-item-info h4 {
-    font-size: 12px;
-  }
-  
-  .search-item-info p {
-    font-size: 11px;
   }
   
   /* Other Mobile Fixes */
@@ -1850,6 +1974,16 @@ img {
     width: 25px;
   }
   
+  .search-results {
+    width: 200px;
+  }
+  
+  .search-add-cart,
+  .search-customize {
+    padding: 3px 6px;
+    font-size: 9px;
+  }
+  
   .action-btn {
     width: 32px;
     height: 32px;
@@ -1869,7 +2003,8 @@ img {
   .cart-sidebar,
   .notifications-panel,
   .alert-popup,
-  .mobile-menu {
+  .mobile-menu,
+  .search-results {
     display: none !important;
   }
 }
@@ -1919,4 +2054,39 @@ textarea:focus {
 @keyframes fadeOut {
   from { opacity: 1; }
   to { opacity: 0; }
+}
+
+/* Loading Animation for Product Grid */
+@keyframes loading {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.products-grid.loading {
+  animation: loading 1s ease-in-out infinite;
+}
+
+/* Notification Animations */
+.notification {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+/* Smooth Hover Transitions */
+.search-add-cart,
+.search-customize,
+.btn,
+.product-card,
+.feature-card {
+  will-change: transform;
+}
+
+/* Performance Optimizations */
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
 }
