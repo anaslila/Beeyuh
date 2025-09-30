@@ -59,71 +59,6 @@ const PRODUCTS = [
     colors: ["Black"]
   },
 
-  {
-    id: 1002,
-    title: "Essential White Crew Neck Tee",
-    price: 1199,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop&sat=0&brightness=1.2",
-    description: "Clean white crew neck t-shirt made from premium cotton blend. A wardrobe essential that goes with everything. Add your personal initials for a custom touch.",
-    category: "Basic Tees",
-    type: "basic",
-    isCustomizable: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["White"]
-  },
-
-  {
-    id: 1003,
-    title: "Navy Blue Essential Tee",
-    price: 1299,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop&hue=220",
-    description: "Rich navy blue t-shirt crafted from soft cotton fabric. Perfect for casual outings and daily wear. Customize with initials to make it uniquely yours.",
-    category: "Basic Tees",
-    type: "basic",
-    isCustomizable: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Navy Blue"]
-  },
-
-  {
-    id: 1004,
-    title: "Charcoal Grey Basic Tee",
-    price: 1249,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop&sat=-20",
-    description: "Versatile charcoal grey t-shirt in premium cotton. Great for layering or wearing solo. Ideal canvas for custom initial embroidery.",
-    category: "Basic Tees",
-    type: "basic",
-    isCustomizable: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Charcoal Grey"]
-  },
-
-  {
-    id: 1005,
-    title: "Olive Green Crew Tee",
-    price: 1299,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop&hue=80",
-    description: "Military-inspired olive green t-shirt with modern fit. Made from high-quality cotton for lasting comfort. Perfect for customization with initials.",
-    category: "Basic Tees",
-    type: "basic",
-    isCustomizable: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Olive Green"]
-  },
-
-  {
-    id: 1006,
-    title: "Maroon Classic Tee",
-    price: 1349,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop&hue=340",
-    description: "Rich maroon colored t-shirt for the bold and confident. Premium cotton construction with excellent fit. Add initials for personal branding.",
-    category: "Basic Tees",
-    type: "basic",
-    isCustomizable: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Maroon"]
-  },
-
   // ===== PREMIUM COLLECTION =====
   {
     id: 2001,
@@ -136,45 +71,6 @@ const PRODUCTS = [
     isCustomizable: true,
     sizes: ["S", "M", "L", "XL", "XXL"],
     colors: ["Premium Black"]
-  },
-
-  {
-    id: 2002,
-    title: "Organic Bamboo Blend Tee",
-    price: 1799,
-    image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=400&h=500&fit=crop",
-    description: "Eco-friendly bamboo cotton blend with natural antibacterial properties. Ultra-soft texture and moisture-wicking capabilities. Perfect for custom initials.",
-    category: "Premium Collection",
-    type: "premium",
-    isCustomizable: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Natural White"]
-  },
-
-  {
-    id: 2003,
-    title: "Merino Wool Blend Premium Tee",
-    price: 2299,
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop&sat=-30",
-    description: "Luxurious merino wool cotton blend for temperature regulation. Perfect for all seasons with premium finish. Exclusive initial customization available.",
-    category: "Premium Collection",
-    type: "premium",
-    isCustomizable: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Heather Grey"]
-  },
-
-  {
-    id: 2004,
-    title: "Supima Cotton White Tee",
-    price: 1999,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop&brightness=1.3",
-    description: "Made from premium Supima cotton with extra-long fibers for ultimate softness. Crisp white finish that stays bright wash after wash. Custom initials included.",
-    category: "Premium Collection",
-    type: "premium",
-    isCustomizable: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Pure White"]
   },
 
   // ===== GRAPHIC PRINTS =====
@@ -191,44 +87,6 @@ const PRODUCTS = [
     colors: ["Black", "White"]
   },
 
-  {
-    id: 3002,
-    title: "Vintage Typography Tee",
-    price: 1599,
-    image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400&h=500&fit=crop&sepia=20",
-    description: "Retro-inspired typography design with vintage aesthetics. Distressed print effect on premium cotton. Perfect for adding custom initials in vintage fonts.",
-    category: "Graphic Prints",
-    type: "graphic",
-    isCustomizable: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Vintage Black", "Faded Grey"]
-  },
-
-  {
-    id: 3003,
-    title: "Abstract Geometric Print Tee",
-    price: 1649,
-    image: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=500&fit=crop&hue=30",
-    description: "Modern abstract geometric patterns in monochrome. Contemporary art meets streetwear fashion. Customizable with initials in complementary fonts.",
-    category: "Graphic Prints",
-    type: "graphic",
-    isCustomizable: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Geometric Black"]
-  },
-
-  {
-    id: 3004,
-    title: "Urban Skyline Print Tee",
-    price: 1549,
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=500&fit=crop&overlay=city",
-    description: "Stylized city skyline graphic for the urban explorer. High-quality print on soft cotton fabric. Add your initials to make it personally yours.",
-    category: "Graphic Prints",
-    type: "graphic",
-    isCustomizable: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Urban Grey", "Night Black"]
-  },
 
   // ===== OVERSIZED FIT =====
   {
@@ -244,45 +102,6 @@ const PRODUCTS = [
     colors: ["Oversized Black"]
   },
 
-  {
-    id: 4002,
-    title: "Boxy Fit Cream Tee",
-    price: 1649,
-    image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=400&h=500&fit=crop&brightness=1.1",
-    description: "Relaxed boxy silhouette in soft cream color. Perfect for layering and casual wear. Spacious design allows for creative initial placement options.",
-    category: "Oversized Fit",
-    type: "oversized",
-    isCustomizable: true,
-    sizes: ["M", "L", "XL", "XXL", "XXXL"],
-    colors: ["Cream"]
-  },
-
-  {
-    id: 4003,
-    title: "Longline Oversized Grey Tee",
-    price: 1749,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop&sat=-40",
-    description: "Extended length oversized tee in sophisticated grey. Modern streetwear aesthetic with superior comfort. Multiple placement options for custom initials.",
-    category: "Oversized Fit",
-    type: "oversized",
-    isCustomizable: true,
-    sizes: ["M", "L", "XL", "XXL", "XXXL"],
-    colors: ["Stone Grey"]
-  },
-
-  {
-    id: 4004,
-    title: "Oversized Pocket Tee Khaki",
-    price: 1799,
-    image: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=500&fit=crop&hue=40",
-    description: "Relaxed oversized fit with chest pocket detail. Military-inspired khaki color for versatile styling. Pocket and chest area perfect for initial customization.",
-    category: "Oversized Fit",
-    type: "oversized",
-    isCustomizable: true,
-    sizes: ["M", "L", "XL", "XXL", "XXXL"],
-    colors: ["Khaki"]
-  },
-
   // ===== LIMITED EDITION =====
   {
     id: 5001,
@@ -296,19 +115,6 @@ const PRODUCTS = [
     sizes: ["S", "M", "L", "XL", "XXL"],
     colors: ["Limited Charcoal"]
   },
-
-  {
-    id: 5002,
-    title: "Anniversary Edition White Tee",
-    price: 2099,
-    image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=400&h=500&fit=crop&brightness=1.4",
-    description: "Special anniversary edition in pure white with subtle BEEYUH heritage details. Premium cotton with commemorative label. Custom initials with silver thread.",
-    category: "Premium Collection",
-    type: "premium",
-    isCustomizable: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Anniversary White"]
-  }
 ];
 
 /*
@@ -484,3 +290,4 @@ Remember to add a comma after the closing }
 
 ===============================================
 */
+
