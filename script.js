@@ -1,4 +1,4 @@
-/* script.js - BEEYUH Men's T-Shirt Store - UPDATED WITH DYNAMIC T-SHIRT PREVIEW */
+/* script.js - BEEYUH Men's T-Shirt Store - UPDATED WITH SEARCH RESULTS BUTTON FIX */
 
 // Global Variables
 let cart = JSON.parse(localStorage.getItem('beeyuh_cart')) || [];
@@ -62,9 +62,14 @@ function bindEvents() {
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
         searchInput.addEventListener('input', handleSearch);
-        searchInput.addEventListener('focus', showSearchResults);
+        searchInput.addEventListener('focus', function() {
+            if (searchInput.value.trim().length >= 2) {
+                showSearchResults();
+            }
+        });
         searchInput.addEventListener('blur', function() {
-            setTimeout(hideSearchResults, 200);
+            // Delay hiding to allow button clicks
+            setTimeout(hideSearchResults, 300);
         });
     }
 
@@ -308,7 +313,7 @@ function filterProducts(filter) {
     renderProducts(filtered);
 }
 
-// Search Functions
+// ===== SEARCH FUNCTIONS - UPDATED WITH VISIBLE BUTTONS =====
 function handleSearch(e) {
     const query = e.target.value.toLowerCase().trim();
     
@@ -328,6 +333,7 @@ function handleSearch(e) {
     displaySearchResults(results);
 }
 
+// *** UPDATED: Search Results with Visible Action Buttons ***
 function displaySearchResults(results) {
     const searchResults = document.getElementById('search-results');
     if (!searchResults) return;
@@ -341,12 +347,24 @@ function displaySearchResults(results) {
                 <div class="search-item-info">
                     <h4>${product.title}</h4>
                     <p>Rs. ${product.price.toLocaleString()}</p>
+                    <div class="search-item-category">${product.category}</div>
+                </div>
+                <div class="search-item-actions">
+                    <button class="search-add-cart" onclick="event.stopPropagation(); quickAddToCart(${product.id}); hideSearchResults(); showNotification('Added to cart: ${product.title}', 'success');">
+                        Add to Cart
+                    </button>
+                    ${product.isCustomizable ? 
+                        `<button class="search-customize" onclick="event.stopPropagation(); openCustomModalWithProduct(${product.id}); hideSearchResults();">
+                            Customize
+                        </button>` : ''
+                    }
                 </div>
             </div>
         `).join('');
     }
     
     showSearchResults();
+    console.log('🔍 Search results displayed with action buttons');
 }
 
 function showSearchResults() {
@@ -409,7 +427,7 @@ function addToCartFromModal() {
     closeProductModal();
 }
 
-// Quick add to cart
+// Quick add to cart - Enhanced with notification
 function quickAddToCart(productId) {
     if (typeof PRODUCTS === 'undefined') return;
     
@@ -417,6 +435,7 @@ function quickAddToCart(productId) {
     if (!product) return;
     
     addToCart(product, 'M', 1);
+    console.log('🛒 Quick add to cart:', product.title);
 }
 
 // ===== UPDATED CUSTOMIZATION FUNCTIONS WITH DYNAMIC T-SHIRT PREVIEW =====
@@ -603,7 +622,10 @@ function updatePreview() {
     // Update price
     const basePrice = currentProduct ? currentProduct.price : 1299;
     const customPrice = basePrice + 200; // Rs. 200 extra for customization
-    document.getElementById('custom-price').textContent = customPrice;
+    const priceElement = document.getElementById('custom-price');
+    if (priceElement) {
+        priceElement.textContent = customPrice;
+    }
 }
 
 function getFontDisplayName(font) {
@@ -658,19 +680,26 @@ function addToCart(product, size = 'M', quantity = 1) {
     
     if (existingItem) {
         existingItem.quantity += quantity;
+        showNotification(`Updated quantity: ${product.title}`, 'success');
     } else {
         cart.push(cartItem);
+        showNotification(`Added to cart: ${product.title}`, 'success');
     }
     
     saveCart();
     updateCartUI();
-    showNotification(`Added to cart: ${product.title}`, 'success');
+    
+    console.log('🛒 Cart updated:', cart.length, 'items');
 }
 
 function removeFromCart(index) {
-    cart.splice(index, 1);
-    saveCart();
-    updateCartUI();
+    const item = cart[index];
+    if (item) {
+        cart.splice(index, 1);
+        saveCart();
+        updateCartUI();
+        showNotification(`Removed: ${item.title}`, 'info');
+    }
 }
 
 function updateCartQuantity(index, quantity) {
@@ -719,7 +748,7 @@ function updateCartUI() {
                         ${item.isCustom ? `
                             <div class="custom-details">
                                 <p>Color: ${item.customization.color}</p>
-                                <p>Initials: ${item.customization.initials}</p>
+                                <p>Initials: "${item.customization.initials}"</p>
                                 <p>Font: ${getFontDisplayName(item.customization.font)}</p>
                                 <p>Placement: ${item.customization.placement.replace('-', ' ')}</p>
                             </div>
@@ -846,26 +875,37 @@ function openCustomizer() {
     openCustomModalWithProduct(null);
 }
 
-// Notification System
+// Enhanced Notification System
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
-    notification.textContent = message;
+    
+    // Add icon based on type
+    const icons = {
+        'success': '✅',
+        'error': '❌',
+        'info': 'ℹ️',
+        'warning': '⚠️'
+    };
+    
+    notification.innerHTML = `${icons[type] || 'ℹ️'} ${message}`;
     
     // Style the notification
     notification.style.cssText = `
         position: fixed;
-        top: 20px;
+        top: 100px;
         right: 20px;
         padding: 15px 20px;
-        background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+        background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : type === 'warning' ? '#ff9800' : '#2196f3'};
         color: white;
         border-radius: 0;
         font-weight: 500;
         z-index: 10000;
         animation: slideIn 0.3s ease;
-        max-width: 300px;
+        max-width: 350px;
         word-wrap: break-word;
+        font-size: 14px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     `;
     
     document.body.appendChild(notification);
@@ -932,11 +972,13 @@ document.head.appendChild(style);
 // Console branding
 console.log(`
 %c BEEYUH - Men's Premium T-Shirts %c
+%c ✅ Search Results Buttons Fixed! 
 %c ✅ Dynamic T-Shirt Preview Enabled! 
 %c 🎯 Store loaded successfully! 
 `, 
 'background: #000; color: #fff; font-weight: bold; padding: 8px 16px;',
 '',
+'color: #4caf50; font-weight: bold;',
 'color: #4caf50; font-weight: bold;',
 'color: #666; font-size: 12px;'
 );
