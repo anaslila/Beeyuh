@@ -45,18 +45,18 @@
 */
 
 const PRODUCTS = [
-  // ===== BASIC TEES =====
+  // ===== CLASSIC COLLECTIONS =====
   {
     id: 1001,
-    title: "Classic Black Crew Neck Tee",
+    title: "Classic Polo T Shirt",
     price: 1299,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop&facepad=10",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfno-7OgS_ufYfURuf7yGysQycpawMVR_U_w&s",
     description: "Premium 100% organic cotton crew neck t-shirt in classic black. Perfect for everyday wear with superior comfort and durability. Can be customized with your initials.",
     category: "Basic Tees",
-    type: "basic",
+    type: "classic",
     isCustomizable: true,
     sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Black"]
+    colors: ["Olive"]
   },
 
   // ===== PREMIUM COLLECTION =====
@@ -290,4 +290,5 @@ Remember to add a comma after the closing }
 
 ===============================================
 */
+
 
