@@ -1,354 +1,1152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BEEYUH - Premium Men's T-Shirts</title>
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/GtsSMnZX/BE-YUH.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BEEYUH — CUSTOM T-SHIRTS</title>
+  <link rel="icon" type="image/png" href="https://i.postimg.cc/GtsSMnZX/BE-YUH.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --black: #000000;
+      --white: #FFFFFF;
+      --gray: #F5F5F5;
+      --border: 2px solid var(--black);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      font-weight: 300;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--white);
+      border-bottom: var(--border);
+      z-index: 1000;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-family: 'Anton', sans-serif;
+      font-size: 24px;
+      letter-spacing: 3px;
+      font-weight: 400;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .nav-link { cursor: pointer; transition: opacity 0.3s ease; }
+    .nav-link:hover { opacity: 0.6; }
+
+    .cart-btn {
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-weight: 400;
+      position: relative;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -12px;
+      background: var(--black);
+      color: var(--white);
+      font-size: 10px;
+      padding: 2px 6px;
+      font-weight: 600;
+    }
+
+    .hero {
+      height: 100vh;
+      background: var(--black);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      margin-top: 64px;
+    }
+
+    .hero-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(60px, 12vw, 140px);
+      letter-spacing: 8px;
+      font-weight: 400;
+      line-height: 0.9;
+      margin-bottom: 30px;
+      animation: fadeInUp 1s ease;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-weight: 300;
+      margin-bottom: 50px;
+      opacity: 0.8;
+      animation: fadeInUp 1.2s ease;
+    }
+
+    .hero-cta {
+      background: var(--white);
+      color: var(--black);
+      border: none;
+      padding: 18px 50px;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      animation: fadeInUp 1.4s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .hero-cta:hover {
+      background: var(--black);
+      color: var(--white);
+      outline: 2px solid var(--white);
+      outline-offset: -2px;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .search-wrapper {
+      background: var(--gray);
+      padding: 60px 40px;
+      border-bottom: var(--border);
+    }
+
+    .search-input {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      display: block;
+      padding: 20px 30px;
+      border: var(--border);
+      background: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      letter-spacing: 1px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus { box-shadow: 8px 8px 0 var(--black); }
+
+    .products-section { padding: 0; background: var(--white); }
+
+    .section-header {
+      background: var(--black);
+      color: var(--white);
+      padding: 80px 40px;
+      text-align: center;
+      border-bottom: var(--border);
+    }
+
+    .section-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(40px, 8vw, 80px);
+      letter-spacing: 6px;
+      font-weight: 400;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-left: var(--border);
+    }
+
+    .product-card {
+      border-right: var(--border);
+      border-bottom: var(--border);
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card:hover { background: var(--gray); }
+
+    .product-image-box {
+      width: 100%;
+      padding-top: 133.33%;
+      position: relative;
+      overflow: hidden;
+      background: var(--gray);
+    }
+
+    .product-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .product-card:hover .product-image { transform: scale(1.05); }
+
+    .product-info {
+      padding: 25px;
+      border-top: var(--border);
+    }
+
+    .product-name {
+      font-family: 'Anton', sans-serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+
+    .product-price {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .product-cta {
+      width: 100%;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      padding: 15px;
+      margin-top: 15px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .product-cta:hover {
+      background: var(--white);
+      color: var(--black);
+      outline: 2px solid var(--black);
+      outline-offset: -2px;
+    }
+
+    .loading-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 100px 40px;
+      font-size: 16px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .cart-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1999;
+    }
+
+    .cart-overlay.active { display: block; }
+
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -500px;
+      width: 500px;
+      height: 100%;
+      background: var(--white);
+      border-left: var(--border);
+      z-index: 2000;
+      transition: right 0.4s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-sidebar.active { right: 0; }
+
+    .cart-head {
+      padding: 30px;
+      border-bottom: var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-head h3 {
+      font-family: 'Anton', sans-serif;
+      font-size: 24px;
+      letter-spacing: 3px;
+      font-weight: 400;
+    }
+
+    .cart-close {
+      background: none;
+      border: none;
+      font-size: 32px;
+      line-height: 1;
+      cursor: pointer;
+      font-weight: 300;
+    }
+
+    .cart-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px;
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 80px 20px;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .cart-item {
+      border: var(--border);
+      padding: 20px;
+      margin-bottom: 20px;
+      background: var(--gray);
+    }
+
+    .cart-item-name {
+      font-family: 'Anton', sans-serif;
+      font-size: 16px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+
+    .cart-item-details {
+      font-size: 12px;
+      line-height: 1.8;
+      margin-bottom: 15px;
+      opacity: 0.8;
+      letter-spacing: 0.5px;
+    }
+
+    .cart-item-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-item-price {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .cart-remove {
+      background: none;
+      border: 1px solid var(--black);
+      padding: 8px 16px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .cart-remove:hover {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .cart-foot {
+      padding: 30px;
+      border-top: var(--border);
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .btn-primary, .btn-secondary {
+      width: 100%;
+      padding: 18px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-primary {
+      background: var(--black);
+      color: var(--white);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--white);
+      color: var(--black);
+      outline: 2px solid var(--black);
+      outline-offset: -2px;
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--black);
+      border: 1px solid var(--black);
+    }
+
+    .btn-secondary:hover { background: var(--gray); }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 3000;
+      overflow-y: auto;
+      padding: 40px 20px;
+    }
+
+    .modal.active {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .modal-box {
+      background: var(--white);
+      border: var(--border);
+      max-width: 1000px;
+      width: 100%;
+      position: relative;
+      margin: auto;
+      box-shadow: 16px 16px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-box.small { max-width: 500px; }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 32px;
+      line-height: 1;
+      cursor: pointer;
+      font-weight: 300;
+      z-index: 10;
+    }
+
+    .modal-header {
+      padding: 40px;
+      border-bottom: var(--border);
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .modal-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 32px;
+      letter-spacing: 3px;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+
+    .modal-content { padding: 40px; }
+
+    .customize-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .modal-product-img {
+      width: 100%;
+      border: var(--border);
+      margin-bottom: 20px;
+    }
+
+    .preview-box {
+      width: 100%;
+      height: 250px;
+      border: var(--border);
+      background: var(--gray);
+    }
+
+    .form-field { margin-bottom: 25px; }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 15px;
+      border: var(--border);
+      background: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus { box-shadow: 6px 6px 0 var(--black); }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .price-display {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: var(--black);
+      color: var(--white);
+      margin: 30px 0;
+      font-size: 20px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .summary-box {
+      background: var(--gray);
+      border: var(--border);
+      padding: 25px;
+      margin: 30px 0;
+    }
+
+    .summary-box h3 {
+      font-family: 'Anton', sans-serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+
+    .summary-line {
+      font-size: 13px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--black);
+      line-height: 1.6;
+    }
+
+    .summary-line:last-child { border-bottom: none; }
+
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: var(--border);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .modal-text {
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      letter-spacing: 0.5px;
+    }
+
+    .footer {
+      background: var(--black);
+      color: var(--white);
+      padding: 60px 40px;
+      border-top: var(--border);
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-family: 'Anton', sans-serif;
+      font-size: 32px;
+      letter-spacing: 4px;
+      margin-bottom: 30px;
+      font-weight: 400;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+    }
+
+    .footer-link {
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+    }
+
+    .footer-link:hover { opacity: 1; }
+
+    .footer-copy {
+      font-size: 12px;
+      opacity: 0.6;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 1024px) {
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .customize-layout { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .nav { padding: 15px 20px; }
+      .brand { font-size: 20px; }
+      .nav-right { gap: 20px; font-size: 12px; }
+      .hero-title { font-size: 48px; letter-spacing: 4px; }
+      .hero-subtitle { font-size: 14px; }
+      .products-grid { grid-template-columns: 1fr; }
+      .cart-sidebar { width: 100%; right: -100%; }
+      .modal-box { margin: 20px; }
+      .footer-links { flex-direction: column; gap: 15px; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Alert System -->
-    <div id="alert-popup" class="alert-popup hidden">
-        <div class="alert-popup-content">
-            <div class="alert-popup-header">
-                <h3 id="alert-popup-title">Alert</h3>
-                <button id="alert-popup-close" class="alert-close-btn">&times;</button>
-            </div>
-            <div class="alert-popup-body">
-                <p id="alert-popup-message">Alert message here</p>
-            </div>
-        </div>
+
+  <nav class="nav">
+    <div class="brand">BEEYUH</div>
+    <div class="nav-right">
+      <button class="cart-btn" onclick="toggleCart()">
+        CART (<span id="cartCount">0</span>)
+      </button>
+      <span class="nav-link" onclick="showAdmin()">ADMIN</span>
     </div>
+  </nav>
 
-    <!-- Top Bar -->
-    <div id="top-bar" class="top-bar">
-        <div class="container">
-            <div class="top-bar-content">
-                <span id="top-bar-message">Free shipping on orders above Rs. 999 | Custom initials available!</span>
-                <button id="top-bar-close" class="top-bar-close">&times;</button>
-            </div>
-        </div>
+  <section class="hero">
+    <h1 class="hero-title">BEEYUH</h1>
+    <p class="hero-subtitle">Custom T-Shirts</p>
+    <button class="hero-cta" onclick="scrollToShop()">Shop Now</button>
+  </section>
+
+  <div class="search-wrapper">
+    <input type="text" id="searchBar" class="search-input" placeholder="SEARCH PRODUCTS...">
+  </div>
+
+  <section class="products-section" id="shop">
+    <div class="section-header">
+      <h2 class="section-title">ALL PRODUCTS</h2>
     </div>
-
-    <!-- SIMPLIFIED HEADER - NAVIGATION REMOVED -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <!-- Logo -->
-                <div class="header-logo">
-                    <img src="https://i.postimg.cc/GtsSMnZX/BE-YUH.png" alt="BEEYUH" width="50" height="50">
-                    <div class="logo-text">
-                        <h1>BEEYUH</h1>
-                        <span>Men's Premium T-Shirts</span>
-                    </div>
-                </div>
-
-                <!-- Header Actions Only -->
-                <div class="header-actions">
-                    <!-- Search -->
-                    <div class="search-container">
-                        <input type="text" id="search-input" class="search-input" placeholder="Search t-shirts...">
-                        <button class="search-btn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
-                                <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/>
-                            </svg>
-                        </button>
-                        <div id="search-results" class="search-results hidden"></div>
-                    </div>
-
-                    <!-- Notifications -->
-                    <button id="notifications-btn" class="action-btn">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2"/>
-                            <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6981 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2"/>
-                        </svg>
-                        <span id="notifications-badge" class="action-badge hidden">0</span>
-                    </button>
-
-                    <!-- Cart -->
-                    <button id="cart-btn" class="action-btn">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17" stroke="currentColor" stroke-width="2"/>
-                            <circle cx="9" cy="22" r="1" stroke="currentColor" stroke-width="2"/>
-                            <circle cx="20" cy="22" r="1" stroke="currentColor" stroke-width="2"/>
-                        </svg>
-                        <span id="cart-badge" class="action-badge hidden">0</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Notifications Panel -->
-    <div id="notifications-panel" class="notifications-panel hidden">
-        <div class="notifications-content">
-            <div class="notifications-header">
-                <h3>Notifications</h3>
-                <button id="notifications-close" class="notifications-close">&times;</button>
-            </div>
-            <div id="notifications-list" class="notifications-list">
-                <!-- Notifications will be loaded here -->
-            </div>
-        </div>
+    <div id="productsGrid" class="products-grid">
+      <div class="loading-state">Loading...</div>
     </div>
+  </section>
 
-    <!-- MINIMAL MAIN CONTENT - NO SCROLLING NEEDED -->
-    <main class="main">
-        <!-- Hero Section - Compact -->
-        <section id="home" class="hero">
-            <div class="container">
-                <div class="hero-content">
-                    <div class="hero-text">
-                        <h1 class="hero-title">PREMIUM MEN'S T-SHIRTS</h1>
-                        <p class="hero-subtitle">Own Your Style. Customize Your Mark.</p>
-                        <div class="hero-actions">
-                            <button class="btn btn-primary" onclick="scrollToShop()">Shop Collection</button>
-                            <button class="btn btn-secondary" onclick="openCustomizer()">Start Customizing</button>
-                        </div>
-                    </div>
-                    <div class="hero-image">
-                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=600&fit=crop" alt="Premium T-Shirt">
-                        <div class="hero-badge">Custom Available</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Products Section - Direct Display -->
-        <section id="shop" class="shop">
-            <div class="container">
-                <div class="shop-header">
-                    <h2 class="section-title">OUR COLLECTION</h2>
-                    <div class="shop-filters">
-                        <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="basic">Basic</button>
-                        <button class="filter-btn" data-filter="premium">Premium</button>
-                        <button class="filter-btn" data-filter="graphic">Graphic</button>
-                        <button class="filter-btn" data-filter="oversized">Oversized</button>
-                    </div>
-                </div>
-                <!-- FIXED: Product Grid Container -->
-                <div id="products-grid" class="products-grid">
-                    <!-- Products will be loaded here by JavaScript -->
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Minimal Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-logo">
-                        <img src="https://i.postimg.cc/GtsSMnZX/BE-YUH.png" alt="BEEYUH" width="40" height="40">
-                        <div>
-                            <h3>BEEYUH</h3>
-                            <p>Premium Men's T-Shirts</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Contact</h4>
-                    <p>WhatsApp: +91 8879706046</p>
-                    <p>Email: hello@beeyuh.com</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Follow</h4>
-                    <div class="social-links">
-                        <a href="#" class="social-link">📷</a>
-                        <a href="#" class="social-link">📘</a>
-                        <a href="#" class="social-link">🐦</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 BEEYUH. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Product Quick View Modal -->
-    <div id="product-modal" class="modal hidden">
-        <div class="modal-overlay"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-title">Product Details</h3>
-                <button id="modal-close" class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="product-details">
-                    <div class="product-image">
-                        <img id="modal-image" src="" alt="">
-                    </div>
-                    <div class="product-info">
-                        <h2 id="modal-product-title"></h2>
-                        <p id="modal-product-price" class="product-price"></p>
-                        <p id="modal-product-description"></p>
-                        <div class="product-options">
-                            <div class="option-group">
-                                <label>Size:</label>
-                                <select id="modal-size-select" class="form-select">
-                                    <option value="S">Small</option>
-                                    <option value="M" selected>Medium</option>
-                                    <option value="L">Large</option>
-                                    <option value="XL">X-Large</option>
-                                    <option value="XXL">XX-Large</option>
-                                </select>
-                            </div>
-                            <div class="option-group">
-                                <label>Quantity:</label>
-                                <input type="number" id="modal-quantity" class="form-input" value="1" min="1" max="10">
-                            </div>
-                        </div>
-                        <div class="product-actions">
-                            <button id="modal-add-to-cart" class="btn btn-primary">Add to Cart</button>
-                            <button id="modal-customize" class="btn btn-secondary">Customize</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <footer class="footer">
+    <div class="footer-brand">BEEYUH</div>
+    <div class="footer-links">
+      <span class="footer-link">INSTAGRAM</span>
+      <span class="footer-link">FACEBOOK</span>
+      <span class="footer-link">CONTACT</span>
     </div>
+    <div class="footer-copy">© 2025 BEEYUH. ALL RIGHTS RESERVED.</div>
+  </footer>
 
-    <!-- Customization Modal -->
-    <div id="custom-modal" class="modal hidden">
-        <div class="modal-overlay"></div>
-        <div class="modal-content custom-modal-content">
-            <div class="modal-header">
-                <h3>Customize Your T-Shirt</h3>
-                <button id="custom-modal-close" class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="customization-container">
-                    <div class="customization-options">
-                        <div class="option-section">
-                            <h4>Choose Color</h4>
-                            <div class="color-options">
-                                <div class="color-option active" data-color="black" style="background: #000000;"></div>
-                                <div class="color-option" data-color="white" style="background: #ffffff; border: 2px solid #ddd;"></div>
-                                <div class="color-option" data-color="navy" style="background: #1a237e;"></div>
-                                <div class="color-option" data-color="gray" style="background: #616161;"></div>
-                                <div class="color-option" data-color="red" style="background: #d32f2f;"></div>
-                                <div class="color-option" data-color="green" style="background: #388e3c;"></div>
-                            </div>
-                        </div>
+  <div id="cartOverlay" class="cart-overlay" onclick="toggleCart()"></div>
 
-                        <div class="option-section">
-                            <h4>Size</h4>
-                            <div class="size-options">
-                                <button class="size-option" data-size="S">S</button>
-                                <button class="size-option active" data-size="M">M</button>
-                                <button class="size-option" data-size="L">L</button>
-                                <button class="size-option" data-size="XL">XL</button>
-                                <button class="size-option" data-size="XXL">XXL</button>
-                            </div>
-                        </div>
-
-                        <div class="option-section">
-                            <h4>Add Initials</h4>
-                            <input type="text" id="initials-input" class="form-input" placeholder="Enter initials (max 3)" maxlength="3">
-                        </div>
-
-                        <div class="option-section">
-                            <h4>Font Style</h4>
-                            <div class="font-options">
-                                <button class="font-option active" data-font="Arial">
-                                    <span style="font-family: Arial;">AB</span>
-                                    <span>Clean</span>
-                                </button>
-                                <button class="font-option" data-font="serif">
-                                    <span style="font-family: serif;">AB</span>
-                                    <span>Classic</span>
-                                </button>
-                                <button class="font-option" data-font="Impact">
-                                    <span style="font-family: Impact;">AB</span>
-                                    <span>Bold</span>
-                                </button>
-                                <button class="font-option" data-font="cursive">
-                                    <span style="font-family: cursive;">AB</span>
-                                    <span>Script</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="option-section">
-                            <h4>Placement</h4>
-                            <div class="placement-options">
-                                <button class="placement-option active" data-placement="left-chest">Left Chest</button>
-                                <button class="placement-option" data-placement="right-chest">Right Chest</button>
-                                <button class="placement-option" data-placement="center-chest">Center Chest</button>
-                                <button class="placement-option" data-placement="left-sleeve">Left Sleeve</button>
-                                <button class="placement-option" data-placement="right-sleeve">Right Sleeve</button>
-                                <button class="placement-option" data-placement="back">Back</button>
-                            </div>
-                        </div>
-
-                        <button id="add-custom-to-cart" class="btn btn-primary btn-full">Add to Cart - Rs. <span id="custom-price">1299</span></button>
-                    </div>
-
-                    <div class="customization-preview">
-                        <h4>Preview</h4>
-                        <div class="tshirt-preview">
-                            <img id="tshirt-template" src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop&auto=format" alt="T-Shirt Template">
-                            <div id="initials-preview" class="initials-preview">AB</div>
-                        </div>
-                        <div class="preview-details">
-                            <div class="preview-item">
-                                <span>Color:</span>
-                                <span id="preview-color">Black</span>
-                            </div>
-                            <div class="preview-item">
-                                <span>Size:</span>
-                                <span id="preview-size">M</span>
-                            </div>
-                            <div class="preview-item">
-                                <span>Initials:</span>
-                                <span id="preview-initials">AB</span>
-                            </div>
-                            <div class="preview-item">
-                                <span>Font:</span>
-                                <span id="preview-font">Clean</span>
-                            </div>
-                            <div class="preview-item">
-                                <span>Placement:</span>
-                                <span id="preview-placement">Left Chest</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <aside id="cartSidebar" class="cart-sidebar">
+    <div class="cart-head">
+      <h3>YOUR CART</h3>
+      <button class="cart-close" onclick="toggleCart()">×</button>
     </div>
-
-    <!-- Cart Sidebar -->
-    <div id="cart-sidebar" class="cart-sidebar hidden">
-        <div class="cart-overlay"></div>
-        <div class="cart-content">
-            <div class="cart-header">
-                <h3>Shopping Cart</h3>
-                <button id="cart-close" class="cart-close">&times;</button>
-            </div>
-            <div id="cart-items" class="cart-items">
-                <!-- Cart items will be loaded here -->
-            </div>
-            <div class="cart-footer">
-                <div class="cart-total">
-                    <span>Total: Rs. <span id="cart-total-amount">0</span></span>
-                </div>
-                <button id="checkout-btn" class="btn btn-primary btn-full">Proceed to Checkout</button>
-            </div>
-        </div>
+    <div id="cartBody" class="cart-body">
+      <p class="cart-empty">Your cart is empty</p>
     </div>
+    <div class="cart-foot">
+      <div class="cart-total">
+        <span>TOTAL</span>
+        <span id="cartTotal">₹0</span>
+      </div>
+      <button class="btn-primary" onclick="showCheckout()">CHECKOUT</button>
+      <button class="btn-secondary" onclick="clearCart()">CLEAR CART</button>
+    </div>
+  </aside>
 
-    <!-- Scripts -->
-    <script src="alerts.js"></script>
-    <script src="products.js"></script>
-    <script src="script.js"></script>
+  <div id="customizeModal" class="modal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeCustomize()">×</button>
+      <div class="modal-header">
+        <h2 class="modal-title" id="customizeTitle">Customize Product</h2>
+      </div>
+      <div class="modal-content">
+        <div class="customize-layout">
+          <div>
+            <img id="customizeImg" src="" alt="" class="modal-product-img">
+            <canvas id="previewCanvas" class="preview-box" width="400" height="250"></canvas>
+          </div>
+          <div>
+            <div class="form-field">
+              <label class="form-label">Size</label>
+              <select id="custSize" class="form-control">
+                <option>S</option>
+                <option>M</option>
+                <option>L</option>
+                <option>XL</option>
+                <option>XXL</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Colour</label>
+              <select id="custColour" class="form-control"></select>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Custom Text (Optional)</label>
+              <input type="text" id="custText" class="form-control" maxlength="30" oninput="updatePreview()">
+            </div>
+            <div class="form-field">
+              <label class="form-label">Font</label>
+              <select id="custFont" class="form-control" onchange="updatePreview()">
+                <option>Arial</option>
+                <option>Times New Roman</option>
+                <option>Courier New</option>
+                <option>Georgia</option>
+                <option>Verdana</option>
+                <option>Impact</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Position</label>
+              <select id="custPos" class="form-control" onchange="updatePreview()">
+                <option>Left Chest</option>
+                <option>Right Chest</option>
+                <option>Collar</option>
+                <option>Sleeve</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Quantity</label>
+              <input type="number" id="custQty" class="form-control" value="1" min="1" max="50">
+            </div>
+            <div class="price-display">
+              <span>PRICE</span>
+              <span id="custPrice">₹0</span>
+            </div>
+            <button class="btn-primary" onclick="addToCartFromModal()">ADD TO CART</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="checkoutModal" class="modal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeCheckout()">×</button>
+      <div class="modal-header">
+        <h2 class="modal-title">CHECKOUT</h2>
+      </div>
+      <div class="modal-content">
+        <form id="checkoutForm">
+          <div class="form-field">
+            <label class="form-label">Email (for returning customers)</label>
+            <input type="email" id="custEmail" class="form-control" onblur="loadCustomer()">
+          </div>
+          <div class="form-field">
+            <label class="form-label">Full Name *</label>
+            <input type="text" id="custName" class="form-control" required>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Phone *</label>
+            <input type="tel" id="custPhone" class="form-control" required>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Delivery Address *</label>
+            <textarea id="custAddr" class="form-control" required></textarea>
+          </div>
+          <div class="summary-box">
+            <h3>ORDER SUMMARY</h3>
+            <div id="checkoutSummary"></div>
+            <div class="summary-total">
+              <span>GRAND TOTAL</span>
+              <span id="checkoutTotal">₹0</span>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">PLACE ORDER</button>
+          <button type="button" class="btn-secondary" onclick="closeCheckout()">CANCEL</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="adminModal" class="modal">
+    <div class="modal-box small">
+      <button class="modal-close-btn" onclick="closeAdmin()">×</button>
+      <div class="modal-header">
+        <h2 class="modal-title">ADMIN</h2>
+      </div>
+      <div class="modal-content">
+        <p class="modal-text">Access the admin dashboard to view all orders</p>
+        <a href="https://www.google.com" target="_blank" class="btn-primary" style="display:block; text-decoration:none; text-align:center;">GO TO ADMIN</a>
+        <button class="btn-secondary" onclick="closeAdmin()">CANCEL</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var allProducts = [];
+    var cart = [];
+    var currentProduct = null;
+
+    window.addEventListener('DOMContentLoaded', function() {
+      loadCartFromStorage();
+      updateCartUI();
+      loadProducts();
+    });
+
+    function loadProducts() {
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res.success) {
+            allProducts = res.products;
+            displayProducts(allProducts);
+          } else {
+            showError(res.error);
+          }
+        })
+        .withFailureHandler(function(err) {
+          showError(err.message);
+        })
+        .getProducts();
+    }
+
+    function displayProducts(products) {
+      var grid = document.getElementById('productsGrid');
+      if (!products || products.length === 0) {
+        grid.innerHTML = '<div class="loading-state">NO PRODUCTS AVAILABLE</div>';
+        return;
+      }
+      grid.innerHTML = '';
+      products.forEach(function(p, i) {
+        var card = document.createElement('div');
+        card.className = 'product-card';
+        card.onclick = function() { openCustomize(i); };
+        card.innerHTML = `
+          <div class="product-image-box">
+            <img src="${p.imageUrl}" alt="${p.name}" class="product-image" onerror="this.src='https://via.placeholder.com/600x800?text=NO+IMAGE'">
+          </div>
+          <div class="product-info">
+            <div class="product-name">${p.name}</div>
+            <div class="product-price">₹${p.price}</div>
+            <button class="product-cta" onclick="event.stopPropagation(); openCustomize(${i});">CUSTOMIZE</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function openCustomize(i) {
+      currentProduct = allProducts[i];
+      document.getElementById('customizeTitle').textContent = currentProduct.name;
+      document.getElementById('customizeImg').src = currentProduct.imageUrl;
+      document.getElementById('custPrice').textContent = '₹' + currentProduct.price;
+      var colSel = document.getElementById('custColour');
+      colSel.innerHTML = '';
+      currentProduct.colours.forEach(function(c) {
+        var opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        colSel.appendChild(opt);
+      });
+      document.getElementById('custText').value = '';
+      document.getElementById('custQty').value = 1;
+      document.getElementById('customizeModal').classList.add('active');
+      updatePreview();
+    }
+
+    function closeCustomize() {
+      document.getElementById('customizeModal').classList.remove('active');
+    }
+
+    function updatePreview() {
+      var canvas = document.getElementById('previewCanvas');
+      var ctx = canvas.getContext('2d');
+      var text = document.getElementById('custText').value;
+      var font = document.getElementById('custFont').value;
+      var pos = document.getElementById('custPos').value;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(100, 30, 200, 160);
+      ctx.beginPath();
+      ctx.arc(200, 30, 25, 0, Math.PI, true);
+      ctx.stroke();
+      if (text) {
+        ctx.fillStyle = '#000';
+        ctx.font = '20px ' + font;
+        ctx.textAlign = 'center';
+        var x = 200, y = 100;
+        if (pos === 'Left Chest') { x = 150; y = 90; }
+        else if (pos === 'Right Chest') { x = 250; y = 90; }
+        else if (pos === 'Collar') { y = 60; }
+        else if (pos === 'Sleeve') { x = 120; y = 70; }
+        ctx.fillText(text, x, y);
+      }
+      ctx.font = '12px Arial';
+      ctx.fillStyle = '#666';
+      ctx.fillText(pos, 200, 210);
+    }
+
+    function addToCartFromModal() {
+      var item = {
+        productId: currentProduct.id,
+        productName: currentProduct.name,
+        colour: document.getElementById('custColour').value,
+        size: document.getElementById('custSize').value,
+        customText: document.getElementById('custText').value,
+        fontStyle: document.getElementById('custFont').value,
+        position: document.getElementById('custPos').value,
+        quantity: parseInt(document.getElementById('custQty').value),
+        unitPrice: currentProduct.price,
+        lineTotal: currentProduct.price * parseInt(document.getElementById('custQty').value)
+      };
+      cart.push(item);
+      saveCartToStorage();
+      updateCartUI();
+      closeCustomize();
+      toggleCart();
+    }
+
+    function updateCartUI() {
+      document.getElementById('cartCount').textContent = cart.length;
+      var body = document.getElementById('cartBody');
+      var total = 0;
+      if (cart.length === 0) {
+        body.innerHTML = '<p class="cart-empty">YOUR CART IS EMPTY</p>';
+        document.getElementById('cartTotal').textContent = '₹0';
+        return;
+      }
+      body.innerHTML = '';
+      cart.forEach(function(item, i) {
+        total += item.lineTotal;
+        var div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <div class="cart-item-name">${item.productName}</div>
+          <div class="cart-item-details">
+            Size: ${item.size} | Colour: ${item.colour}<br>
+            ${item.customText ? 'Text: "' + item.customText + '"<br>' : ''}
+            ${item.customText ? 'Font: ' + item.fontStyle + ' | Position: ' + item.position + '<br>' : ''}
+            Quantity: ${item.quantity}
+          </div>
+          <div class="cart-item-footer">
+            <div class="cart-item-price">₹${item.lineTotal}</div>
+            <button class="cart-remove" onclick="removeItem(${i})">REMOVE</button>
+          </div>
+        `;
+        body.appendChild(div);
+      });
+      document.getElementById('cartTotal').textContent = '₹' + total;
+    }
+
+    function removeItem(i) {
+      cart.splice(i, 1);
+      saveCartToStorage();
+      updateCartUI();
+    }
+
+    function clearCart() {
+      if (confirm('Clear your cart?')) {
+        cart = [];
+        saveCartToStorage();
+        updateCartUI();
+      }
+    }
+
+    function toggleCart() {
+      document.getElementById('cartSidebar').classList.toggle('active');
+      document.getElementById('cartOverlay').classList.toggle('active');
+    }
+
+    function saveCartToStorage() {
+      localStorage.setItem('beeyuh_cart', JSON.stringify(cart));
+    }
+
+    function loadCartFromStorage() {
+      var saved = localStorage.getItem('beeyuh_cart');
+      if (saved) cart = JSON.parse(saved);
+    }
+
+    function showCheckout() {
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+      var summary = document.getElementById('checkoutSummary');
+      var total = 0;
+      summary.innerHTML = '';
+      cart.forEach(function(item) {
+        total += item.lineTotal;
+        var div = document.createElement('div');
+        div.className = 'summary-line';
+        div.innerHTML = `
+          <strong>${item.productName}</strong><br>
+          Size: ${item.size} | Colour: ${item.colour} | Qty: ${item.quantity}<br>
+          ${item.customText ? 'Text: "' + item.customText + '"<br>' : ''}
+          ₹${item.lineTotal}
+        `;
+        summary.appendChild(div);
+      });
+      document.getElementById('checkoutTotal').textContent = '₹' + total;
+      document.getElementById('checkoutModal').classList.add('active');
+    }
+
+    function closeCheckout() {
+      document.getElementById('checkoutModal').classList.remove('active');
+    }
+
+    function loadCustomer() {
+      var email = document.getElementById('custEmail').value;
+      if (!email) return;
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res.success) {
+            document.getElementById('custName').value = res.customer.name;
+            document.getElementById('custPhone').value = res.customer.phone;
+            document.getElementById('custAddr').value = res.customer.address;
+          }
+        })
+        .getCustomerByEmail(email);
+    }
+
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var total = 0;
+      cart.forEach(function(item) { total += item.lineTotal; });
+      var orderData = {
+        customer: {
+          name: document.getElementById('custName').value,
+          email: document.getElementById('custEmail').value,
+          phone: document.getElementById('custPhone').value,
+          address: document.getElementById('custAddr').value
+        },
+        items: cart,
+        totalAmount: total
+      };
+      var btn = document.querySelector('#checkoutForm .btn-primary');
+      btn.disabled = true;
+      btn.textContent = 'PLACING ORDER...';
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res.success) {
+            alert('Order placed successfully!\nOrder ID: ' + res.orderId);
+            cart = [];
+            saveCartToStorage();
+            updateCartUI();
+            document.getElementById('checkoutForm').reset();
+            closeCheckout();
+          } else {
+            alert('Error: ' + res.error);
+          }
+          btn.disabled = false;
+          btn.textContent = 'PLACE ORDER';
+        })
+        .withFailureHandler(function(err) {
+          alert('Error: ' + err.message);
+          btn.disabled = false;
+          btn.textContent = 'PLACE ORDER';
+        })
+        .placeOrder(orderData);
+    });
+
+    document.getElementById('searchBar').addEventListener('input', function(e) {
+      var term = e.target.value.toLowerCase();
+      var filtered = allProducts.filter(function(p) {
+        return p.name.toLowerCase().includes(term) || p.description.toLowerCase().includes(term);
+      });
+      displayProducts(filtered);
+    });
+
+    function showAdmin() {
+      document.getElementById('adminModal').classList.add('active');
+    }
+
+    function closeAdmin() {
+      document.getElementById('adminModal').classList.remove('active');
+    }
+
+    function scrollToShop() {
+      document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showError(msg) {
+      document.getElementById('productsGrid').innerHTML = '<div class="loading-state" style="color:red;">' + msg + '</div>';
+    }
+  </script>
+
 </body>
 </html>
