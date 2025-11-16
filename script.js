@@ -1,9 +1,10 @@
 // ==========================================
-// BEEYUH - Main JavaScript v2.7 Admin Mode
+// BEEYUH - Main JavaScript v3.0 Order Management
 // ==========================================
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbxOjPXr7ieT9HgyVmv3MdDBt_ouOkY3rQbtZafP2cSFH5qY-7nVngQEVhgp3OiGgafR/exec';
 const MAX_CART_ITEMS = 100;
+const SUPPORT_WHATSAPP = '+918082422478';
 
 const loadingMessages = [
     'Finding your vibe',
@@ -43,9 +44,11 @@ let currentUser = null;
 let currentAdmin = null;
 let allOrders = [];
 let allCustomers = [];
+let customerOrders = [];
 let cart = [];
 let collateralInterval = null;
 let currentOrderForInvoice = null;
+let currentOrderForDetails = null;
 let isAdminMode = false;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -286,6 +289,7 @@ function saveAdminSession(adminData) {
 function logout() {
     localStorage.removeItem('beeyuh_customer');
     currentUser = null;
+    customerOrders = [];
     hideCustomerDashboard();
     showNotification('Logged out successfully', 'success', true);
 }
@@ -423,7 +427,7 @@ async function customerLogin() {
     
     if (result.status === 'success') {
         saveCustomerSession(result.data);
-        showCustomerDashboard();
+        await showCustomerDashboard();
         showNotification('Login successful!', 'success', true);
     } else {
         showNotification(result.message || 'Login failed', 'error', true);
@@ -464,7 +468,7 @@ async function registerCustomer() {
     }
 }
 
-function showCustomerDashboard() {
+async function showCustomerDashboard() {
     document.getElementById('loginForm').classList.remove('active');
     document.getElementById('registerForm').classList.remove('active');
     
@@ -479,12 +483,289 @@ function showCustomerDashboard() {
             <p><strong>Phone:</strong> ${currentUser.Phone}</p>
         `;
         dashboard.classList.add('active');
+        
+        // Load customer orders
+        await loadCustomerOrders();
     }
 }
 
 function hideCustomerDashboard() {
     document.getElementById('customerDashboard').classList.remove('active');
     document.getElementById('loginForm').classList.add('active');
+}
+
+// ==========================================
+// CUSTOMER ORDER MANAGEMENT
+// ==========================================
+
+async function loadCustomerOrders() {
+    if (!currentUser) return;
+    
+    showLoadingScreen();
+    const result = await apiCall('getCustomerOrders', { customerId: currentUser['Customer ID'] });
+    hideLoadingScreen();
+    
+    if (result.status === 'success') {
+        customerOrders = result.data;
+        displayCustomerOrders();
+    } else {
+        showNotification('Failed to load orders', 'error', false);
+    }
+}
+
+function displayCustomerOrders() {
+    const container = document.getElementById('customerOrdersContainer');
+    
+    if (customerOrders.length === 0) {
+        container.innerHTML = `
+            <div class="empty-orders-state">
+                <img src="https://cdni.iconscout.com/illustration/premium/thumb/girl-holding-empty-shopping-cart-illustration-svg-download-png-10018095.png" 
+                     alt="No Orders" class="empty-orders-icon">
+                <p class="empty-orders-text">No orders found</p>
+                <button class="btn btn-primary" onclick="navigateTo('products')">Start Shopping</button>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '<div class="customer-orders-list">';
+    
+    customerOrders.forEach(order => {
+        const statusClass = getStatusClass(order['Order Status']);
+        const canCancel = (order['Order Status'] === 'Order Placed' || order['Order Status'] === 'Processing');
+        const isDelivered = (order['Order Status'] === 'Delivered');
+        
+        html += `
+            <div class="customer-order-card" onclick="openOrderDetailsModal('${order['Order ID']}', false)">
+                <div class="order-card-header">
+                    <span class="order-card-id">${order['Order ID']}</span>
+                    <span class="status-badge ${statusClass}">${order['Order Status']}</span>
+                </div>
+                <div class="order-card-info">
+                    <p><strong>Date:</strong> ${formatDate(order['Order Date'])}</p>
+                    <p><strong>Amount:</strong> ₹${order['Total Amount']}</p>
+                    <p><strong>Payment:</strong> ${order['Payment Mode'] || 'COD'}</p>
+                    ${order['Tracking Number'] ? `<p><strong>Tracking:</strong> ${order['Tracking Number']}</p>` : ''}
+                </div>
+                <div class="order-card-actions" onclick="event.stopPropagation()">
+                    <button class="btn-order-action btn-view-details" onclick="openOrderDetailsModal('${order['Order ID']}', false)">
+                        <span class="material-symbols-outlined">visibility</span>
+                        View Details
+                    </button>
+                    ${canCancel ? `
+                        <button class="btn-order-action btn-cancel-order" onclick="cancelCustomerOrder('${order['Order ID']}')">
+                            <span class="material-symbols-outlined">cancel</span>
+                            Cancel Order
+                        </button>
+                    ` : ''}
+                    ${isDelivered ? `
+                        <button class="btn-order-action btn-contact-agent" onclick="contactSupportAgent('${order['Order ID']}')">
+                            <span class="material-symbols-outlined">support_agent</span>
+                            Contact Agent
+                        </button>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+async function cancelCustomerOrder(orderId) {
+    if (!confirm('Are you sure you want to cancel this order?')) {
+        return;
+    }
+    
+    showLoadingScreen();
+    const result = await apiCall('cancelOrder', { 
+        orderId: orderId, 
+        customerId: currentUser['Customer ID'] 
+    }, 'POST');
+    hideLoadingScreen();
+    
+    if (result.status === 'success') {
+        showNotification('Order cancelled successfully!', 'success', true);
+        await loadCustomerOrders();
+    } else {
+        showNotification(result.message || 'Failed to cancel order', 'error', true);
+    }
+}
+
+function contactSupportAgent(orderId) {
+    const message = `Hello! I need assistance regarding my order.\n\n*Order ID:* ${orderId}\n\nPlease help me with this order.`;
+    const phone = SUPPORT_WHATSAPP.replace(/[^0-9]/g, '');
+    const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, '_blank');
+}
+
+// Continue in Part 2...
+// ==========================================
+// ORDER DETAILS MODAL (FOR BOTH CUSTOMER & ADMIN)
+// ==========================================
+
+async function openOrderDetailsModal(orderId, isAdmin = false) {
+    showLoadingScreen();
+    const result = await apiCall('getOrderDetails', { orderId: orderId });
+    hideLoadingScreen();
+    
+    if (result.status === 'success') {
+        currentOrderForDetails = result.data;
+        displayOrderDetailsModal(result.data, isAdmin);
+        document.getElementById('orderDetailsModal').classList.add('active');
+    } else {
+        showNotification('Failed to load order details', 'error', true);
+    }
+}
+
+function displayOrderDetailsModal(order, isAdmin) {
+    const container = document.getElementById('orderDetailsContent');
+    
+    let items = [];
+    try {
+        items = JSON.parse(order['Items']);
+    } catch(e) {
+        items = [];
+    }
+    
+    const statusClass = getStatusClass(order['Order Status']);
+    
+    let html = `
+        <div class="order-detail-section">
+            <h3>Order Information</h3>
+            <div class="order-detail-grid">
+                <div class="order-detail-item">
+                    <div class="order-detail-label">Order ID</div>
+                    <div class="order-detail-value">${order['Order ID']}</div>
+                </div>
+                <div class="order-detail-item">
+                    <div class="order-detail-label">Order Date</div>
+                    <div class="order-detail-value">${formatDate(order['Order Date'])}</div>
+                </div>
+                <div class="order-detail-item">
+                    <div class="order-detail-label">Status</div>
+                    <div class="order-detail-value">
+                        <span class="status-badge ${statusClass}">${order['Order Status']}</span>
+                    </div>
+                </div>
+                <div class="order-detail-item">
+                    <div class="order-detail-label">Payment Mode</div>
+                    <div class="order-detail-value">${order['Payment Mode'] || 'COD'}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="order-detail-section">
+            <h3>Customer Details</h3>
+            <div class="order-detail-grid">
+                <div class="order-detail-item">
+                    <div class="order-detail-label">Name</div>
+                    <div class="order-detail-value">${order['Customer Name']}</div>
+                </div>
+                <div class="order-detail-item">
+                    <div class="order-detail-label">Email</div>
+                    <div class="order-detail-value">${order['Customer Email']}</div>
+                </div>
+                <div class="order-detail-item">
+                    <div class="order-detail-label">Phone</div>
+                    <div class="order-detail-value">${order['Customer Phone']}</div>
+                </div>
+                <div class="order-detail-item">
+                    <div class="order-detail-label">Customer ID</div>
+                    <div class="order-detail-value">${order['Customer ID']}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="order-detail-section">
+            <h3>Shipping Address</h3>
+            <div class="order-detail-item">
+                <div class="order-detail-value">
+                    ${order['Shipping Address']}, ${order.City}, ${order.State} - ${order.Pincode}
+                </div>
+            </div>
+        </div>
+        
+        <div class="order-detail-section">
+            <h3>Order Items</h3>
+            <div class="order-items-list">
+    `;
+    
+    items.forEach(item => {
+        html += `
+            <div class="order-item-row">
+                <div class="order-item-name">${item.name}</div>
+                <div class="order-item-details">Size: ${item.size} | Qty: ${item.quantity}</div>
+                <div class="order-item-price">₹${item.price * item.quantity}</div>
+            </div>
+        `;
+    });
+    
+    html += `
+            </div>
+        </div>
+        
+        <div class="order-detail-section">
+            <h3>Shipping & Tracking</h3>
+            <div class="order-detail-grid">
+                ${order['Tracking Number'] ? `
+                    <div class="order-detail-item">
+                        <div class="order-detail-label">Tracking Number</div>
+                        <div class="order-detail-value">${order['Tracking Number']}</div>
+                    </div>
+                ` : ''}
+                ${order['Courier Name'] ? `
+                    <div class="order-detail-item">
+                        <div class="order-detail-label">Courier</div>
+                        <div class="order-detail-value">${order['Courier Name']}</div>
+                    </div>
+                ` : ''}
+                ${order['Dispatched Date'] ? `
+                    <div class="order-detail-item">
+                        <div class="order-detail-label">Dispatched Date</div>
+                        <div class="order-detail-value">${formatDate(order['Dispatched Date'])}</div>
+                    </div>
+                ` : ''}
+                ${order['Expected Delivery'] ? `
+                    <div class="order-detail-item">
+                        <div class="order-detail-label">Expected Delivery</div>
+                        <div class="order-detail-value">${formatDate(order['Expected Delivery'])}</div>
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+        
+        <div class="order-detail-section">
+            <h3>Payment Summary</h3>
+            <div class="order-detail-grid">
+                <div class="order-detail-item">
+                    <div class="order-detail-label">Total Amount</div>
+                    <div class="order-detail-value">₹${order['Total Amount']}</div>
+                </div>
+                <div class="order-detail-item">
+                    <div class="order-detail-label">Payment Status</div>
+                    <div class="order-detail-value">${order['Payment Status'] || 'Pending'}</div>
+                </div>
+            </div>
+        </div>
+        
+        ${order['Notes'] ? `
+            <div class="order-detail-section">
+                <h3>Notes</h3>
+                <div class="order-detail-item">
+                    <div class="order-detail-value">${order['Notes']}</div>
+                </div>
+            </div>
+        ` : ''}
+    `;
+    
+    container.innerHTML = html;
+}
+
+function closeOrderDetailsModal() {
+    document.getElementById('orderDetailsModal').classList.remove('active');
+    currentOrderForDetails = null;
 }
 
 // ==========================================
@@ -529,7 +810,6 @@ function hideAdminDashboard() {
     document.getElementById('adminLogin').classList.add('active');
 }
 
-// CRM Tab Switching
 function switchCRMTab(tabName) {
     document.querySelectorAll('.crm-tab').forEach(tab => {
         tab.classList.remove('active');
@@ -627,10 +907,10 @@ function displayOrdersInTable(containerId, orders) {
         const statusClass = getStatusClass(order['Order Status']);
         
         html += `
-            <tr>
+            <tr onclick="openOrderDetailsModal('${order['Order ID']}', true)">
                 <td>
                     <strong>${order['Order ID']}</strong>
-                    <button class="btn-crm-action btn-copy" onclick="copyOrderId('${order['Order ID']}')" title="Copy Order ID">
+                    <button class="btn-crm-action btn-copy" onclick="event.stopPropagation(); copyOrderId('${order['Order ID']}')" title="Copy Order ID">
                         <span class="material-symbols-outlined">content_copy</span>
                     </button>
                 </td>
@@ -638,7 +918,7 @@ function displayOrdersInTable(containerId, orders) {
                 <td>₹${order['Total Amount']}</td>
                 <td><span class="status-badge ${statusClass}">${order['Order Status']}</span></td>
                 <td>${formatDate(order['Order Date'])}</td>
-                <td>
+                <td onclick="event.stopPropagation()">
                     <div class="order-actions-crm">
                         <button class="btn-crm-action btn-view" onclick="openUpdateModal('${order['Order ID']}')" title="Update Order">
                             <span class="material-symbols-outlined">edit</span>
@@ -736,7 +1016,6 @@ function sendWhatsAppUpdate(orderId) {
     window.open(whatsappURL, '_blank');
 }
 
-// Continuing in next message...
 // ==========================================
 // INVOICE GENERATION
 // ==========================================
@@ -1003,6 +1282,7 @@ async function submitOrderUpdate() {
     }
 }
 
+// Continue in Part 3 (Cart, Checkout, Products, Utilities)...
 // ==========================================
 // ORDER TRACKING
 // ==========================================
@@ -1031,7 +1311,7 @@ async function trackOrder() {
             <div class="track-info">
                 <h3>Order Found!</h3>
                 <p><strong>Order ID:</strong> ${order['Order ID']}</p>
-                <p><strong>Status:</strong> <span class="order-status ${statusClass}">${order['Order Status']}</span></p>
+                <p><strong>Status:</strong> <span class="status-badge ${statusClass}">${order['Order Status']}</span></p>
                 <p><strong>Order Date:</strong> ${formatDate(order['Order Date'])}</p>
                 <p><strong>Customer Name:</strong> ${order['Customer Name']}</p>
                 <p><strong>Total Amount:</strong> ₹${order['Total Amount']}</p>
