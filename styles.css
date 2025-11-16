@@ -1,8 +1,7 @@
 /* ==================== */
-/* BEEYUH - Styles v2.6 - Professional CRM */
+/* BEEYUH - Styles v2.7 - Polished Admin */
 /* ==================== */
 
-/* RESET & BASE */
 * {
     margin: 0;
     padding: 0;
@@ -26,6 +25,7 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --crm-bg: #f5f7fa;
     --crm-card-bg: #ffffff;
+    --admin-header-color: #373e42;
 }
 
 body {
@@ -35,6 +35,12 @@ body {
     line-height: 1.6;
     background: var(--secondary-color);
     overflow-x: hidden;
+}
+
+/* Admin Mode - Open Sans 15px */
+body.admin-mode {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
 }
 
 /* ==================== */
@@ -112,7 +118,7 @@ body {
 }
 
 /* ==================== */
-/* HEADER */
+/* CUSTOMER HEADER */
 /* ==================== */
 
 .header {
@@ -138,11 +144,6 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
-}
-
-.container-fluid {
-    width: 100%;
-    padding: 0;
 }
 
 .header-content {
@@ -204,10 +205,6 @@ body {
     color: #d32f2f;
 }
 
-/* ==================== */
-/* CART BUTTON */
-/* ==================== */
-
 .cart-button {
     position: relative;
     background: var(--primary-color);
@@ -244,13 +241,98 @@ body {
 }
 
 /* ==================== */
-/* CRM ADMIN SECTION */
+/* ADMIN HEADER - NEW */
 /* ==================== */
 
-.admin-container-crm {
+.admin-header {
+    background: var(--secondary-color);
+    border-bottom: 2px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow-hover);
+    animation: slideDown 0.5s ease;
+}
+
+.admin-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px;
+}
+
+.admin-logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.admin-logo-img {
+    height: 45px;
+}
+
+.admin-crm-badge {
     font-family: 'Open Sans', sans-serif;
-    background: var(--crm-bg);
-    min-height: 100vh;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--admin-header-color);
+    letter-spacing: 0.5px;
+}
+
+.admin-header-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-admin-outline,
+.btn-admin-logout {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+}
+
+.btn-admin-outline {
+    background: transparent;
+    border: 2px solid var(--admin-header-color);
+    color: var(--admin-header-color);
+}
+
+.btn-admin-outline:hover {
+    background: var(--admin-header-color);
+    color: var(--secondary-color);
+}
+
+.btn-admin-logout {
+    background: #d32f2f;
+    color: white;
+}
+
+.btn-admin-logout:hover {
+    background: #c62828;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.btn-admin-outline .material-symbols-outlined,
+.btn-admin-logout .material-symbols-outlined {
+    font-size: 20px;
+}
+
+/* ==================== */
+/* ADMIN CRM SECTION */
+/* ==================== */
+
+.admin-page-wrapper {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
 }
 
 .admin-login-card {
@@ -265,58 +347,12 @@ body {
 .dashboard-crm {
     display: none;
     animation: fadeIn 0.6s ease;
+    background: var(--crm-bg);
+    min-height: calc(100vh - 90px);
 }
 
 .dashboard-crm.active {
     display: block;
-}
-
-/* CRM Header */
-.crm-header {
-    background: var(--crm-card-bg);
-    padding: 25px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: var(--shadow);
-}
-
-.crm-header-left {
-    flex: 1;
-}
-
-.crm-title {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 5px;
-    color: var(--primary-color);
-}
-
-.crm-subtitle {
-    font-size: 14px;
-    color: var(--accent-color);
-    font-weight: 400;
-}
-
-.crm-header-right {
-    display: flex;
-    gap: 15px;
-}
-
-.btn-outline {
-    background: transparent;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.btn-outline:hover {
-    background: var(--primary-color);
-    color: var(--secondary-color);
 }
 
 /* CRM Tabs */
@@ -429,7 +465,7 @@ body {
 }
 
 .stat-details p {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--accent-color);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -444,7 +480,7 @@ body {
 }
 
 .crm-section-header h2 {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
 }
 
@@ -468,6 +504,7 @@ body {
     width: 300px;
     font-size: 14px;
     transition: var(--transition);
+    font-family: 'Open Sans', sans-serif;
 }
 
 .search-box input:focus {
@@ -499,7 +536,7 @@ body {
     padding: 18px 20px;
     text-align: left;
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: var(--accent-color);
@@ -592,7 +629,7 @@ body {
 .status-badge {
     padding: 6px 12px;
     border-radius: 20px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     display: inline-block;
@@ -628,6 +665,12 @@ body {
     margin-top: 40px;
 }
 
+.section-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
 /* Analytics Grid */
 .analytics-grid {
     display: grid;
@@ -644,7 +687,7 @@ body {
 }
 
 .analytics-card h3 {
-    font-size: 20px;
+    font-size: 18px;
     margin-bottom: 20px;
     font-weight: 700;
 }
@@ -865,7 +908,7 @@ body {
 }
 
 /* ==================== */
-/* PASSWORD FIELD */
+/* PASSWORD & DROPDOWNS */
 /* ==================== */
 
 .password-field {
@@ -896,10 +939,6 @@ body {
 .password-toggle .material-symbols-outlined {
     font-size: 22px;
 }
-
-/* ==================== */
-/* SEARCHABLE DROPDOWN */
-/* ==================== */
 
 .searchable-dropdown {
     position: relative;
@@ -947,7 +986,7 @@ body {
 }
 
 /* ==================== */
-/* REMAINING STYLES (Same as v2.5) */
+/* REMAINING STYLES */
 /* ==================== */
 
 .collateral-carousel {
@@ -1054,14 +1093,6 @@ body {
 
 .featured-section {
     padding: 60px 0;
-}
-
-.section-title {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 30px;
-    text-align: center;
-    animation: fadeInUp 0.6s ease;
 }
 
 .page-title {
@@ -1527,9 +1558,9 @@ body {
 }
 
 @media (max-width: 768px) {
-    .crm-header {
+    .admin-header-content {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
     }
     
     .crm-tabs {

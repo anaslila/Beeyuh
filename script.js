@@ -1,5 +1,5 @@
 // ==========================================
-// BEEYUH - Main JavaScript v2.6 CRM
+// BEEYUH - Main JavaScript v2.7 Admin Mode
 // ==========================================
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbxOjPXr7ieT9HgyVmv3MdDBt_ouOkY3rQbtZafP2cSFH5qY-7nVngQEVhgp3OiGgafR/exec';
@@ -46,6 +46,7 @@ let allCustomers = [];
 let cart = [];
 let collateralInterval = null;
 let currentOrderForInvoice = null;
+let isAdminMode = false;
 
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
@@ -63,6 +64,34 @@ async function initializeApp() {
     setTimeout(() => {
         hideLoadingScreen();
     }, 3000);
+}
+
+// ==========================================
+// ADMIN MODE TOGGLE
+// ==========================================
+
+function enableAdminMode() {
+    isAdminMode = true;
+    document.body.classList.add('admin-mode');
+    document.getElementById('mainHeader').style.display = 'none';
+    document.getElementById('adminHeader').style.display = 'block';
+    document.getElementById('cartSidebar').style.display = 'none';
+    document.getElementById('mainFooter').style.display = 'none';
+}
+
+function disableAdminMode() {
+    isAdminMode = false;
+    document.body.classList.remove('admin-mode');
+    document.getElementById('mainHeader').style.display = 'block';
+    document.getElementById('adminHeader').style.display = 'none';
+    document.getElementById('cartSidebar').style.display = 'flex';
+    document.getElementById('mainFooter').style.display = 'block';
+}
+
+function exitAdminMode() {
+    disableAdminMode();
+    navigateTo('home');
+    showNotification('Switched to customer view', 'success', true);
 }
 
 // ==========================================
@@ -265,6 +294,8 @@ function adminLogout() {
     localStorage.removeItem('beeyuh_admin');
     currentAdmin = null;
     hideAdminDashboard();
+    disableAdminMode();
+    navigateTo('home');
     showNotification('Admin logged out successfully', 'success', true);
 }
 
@@ -476,6 +507,7 @@ async function adminLogin() {
     if (result.status === 'success') {
         saveAdminSession(result.data);
         await showAdminDashboard();
+        enableAdminMode();
         showNotification('Admin login successful!', 'success', true);
     } else {
         showNotification(result.message || 'Admin login failed', 'error', true);
@@ -623,11 +655,7 @@ function displayOrdersInTable(containerId, orders) {
         `;
     });
     
-    html += `
-            </tbody>
-        </table>
-    `;
-    
+    html += `</tbody></table>`;
     container.innerHTML = html;
 }
 
@@ -667,11 +695,7 @@ function displayCustomersTable() {
         `;
     });
     
-    html += `
-            </tbody>
-        </table>
-    `;
-    
+    html += `</tbody></table>`;
     container.innerHTML = html;
 }
 
@@ -712,6 +736,7 @@ function sendWhatsAppUpdate(orderId) {
     window.open(whatsappURL, '_blank');
 }
 
+// Continuing in next message...
 // ==========================================
 // INVOICE GENERATION
 // ==========================================
@@ -918,7 +943,6 @@ function searchCustomers(searchTerm) {
     container.innerHTML = html;
 }
 
-// Continuing in next message due to character limit...
 // ==========================================
 // ORDER UPDATE MODAL
 // ==========================================

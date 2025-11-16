@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <!-- HEADER -->
+    <!-- CUSTOMER HEADER (Hidden when admin logged in) -->
     <header id="mainHeader" class="header">
         <div class="container">
             <div class="header-content">
@@ -41,6 +41,26 @@
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
                     <span id="cartCount" class="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ADMIN HEADER (Shown only when admin logged in) -->
+    <header id="adminHeader" class="admin-header" style="display: none;">
+        <div class="admin-header-content">
+            <div class="admin-logo-section">
+                <img src="https://i.postimg.cc/x8md44rb/image.png" alt="BEEYUH" class="admin-logo-img">
+                <span class="admin-crm-badge">Admin CRM</span>
+            </div>
+            <div class="admin-header-actions">
+                <button class="btn-admin-outline" onclick="exitAdminMode()">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    Back to Website
+                </button>
+                <button class="btn-admin-logout" onclick="adminLogout()">
+                    <span class="material-symbols-outlined">logout</span>
+                    Logout
                 </button>
             </div>
         </div>
@@ -94,7 +114,6 @@
                         <button class="auth-tab" data-tab="register">Register</button>
                     </div>
                     
-                    <!-- LOGIN FORM -->
                     <div id="loginForm" class="auth-form active">
                         <h2 class="form-title">Customer Login</h2>
                         <input type="email" id="loginEmail" class="input" placeholder="Email">
@@ -107,7 +126,6 @@
                         <button class="btn btn-primary" onclick="customerLogin()">Login</button>
                     </div>
                     
-                    <!-- REGISTER FORM -->
                     <div id="registerForm" class="auth-form">
                         <h2 class="form-title">Create Account</h2>
                         <input type="text" id="regFullName" class="input" placeholder="Full Name">
@@ -135,7 +153,6 @@
                         <button class="btn btn-primary" onclick="registerCustomer()">Register</button>
                     </div>
                     
-                    <!-- CUSTOMER DASHBOARD -->
                     <div id="customerDashboard" class="dashboard">
                         <h2 class="form-title">My Account</h2>
                         <div id="customerInfo" class="customer-info"></div>
@@ -145,12 +162,12 @@
             </div>
         </section>
 
-        <!-- ADMIN PAGE - NEW CRM SYSTEM -->
+        <!-- ADMIN PAGE -->
         <section id="adminPage" class="page">
-            <div class="container-fluid">
-                <div class="admin-container-crm">
-                    <!-- ADMIN LOGIN -->
-                    <div id="adminLogin" class="auth-form active">
+            <div class="admin-page-wrapper">
+                <!-- ADMIN LOGIN -->
+                <div id="adminLogin" class="auth-form active">
+                    <div class="container">
                         <div class="admin-login-card">
                             <h2 class="form-title">Admin Login</h2>
                             <input type="email" id="adminEmail" class="input" placeholder="Admin Email">
@@ -163,130 +180,112 @@
                             <button class="btn btn-primary" onclick="adminLogin()">Login</button>
                         </div>
                     </div>
-                    
-                    <!-- ADMIN CRM DASHBOARD -->
-                    <div id="adminDashboard" class="dashboard-crm">
-                        <!-- CRM Header -->
-                        <div class="crm-header">
-                            <div class="crm-header-left">
-                                <h1 class="crm-title">BEEYUH Admin CRM</h1>
-                                <p class="crm-subtitle">Manage your e-commerce business</p>
-                            </div>
-                            <div class="crm-header-right">
-                                <button class="btn btn-outline" onclick="navigateTo('home')">
-                                    <span class="material-symbols-outlined">arrow_back</span>
-                                    Back to Website
-                                </button>
-                                <button class="btn btn-secondary" onclick="adminLogout()">
-                                    <span class="material-symbols-outlined">logout</span>
-                                    Logout
-                                </button>
-                            </div>
-                        </div>
+                </div>
+                
+                <!-- ADMIN CRM DASHBOARD -->
+                <div id="adminDashboard" class="dashboard-crm">
+                    <!-- CRM Navigation Tabs -->
+                    <div class="crm-tabs">
+                        <button class="crm-tab active" data-tab="dashboard" onclick="switchCRMTab('dashboard')">
+                            <span class="material-symbols-outlined">dashboard</span>
+                            Dashboard
+                        </button>
+                        <button class="crm-tab" data-tab="orders" onclick="switchCRMTab('orders')">
+                            <span class="material-symbols-outlined">shopping_cart</span>
+                            Orders
+                        </button>
+                        <button class="crm-tab" data-tab="customers" onclick="switchCRMTab('customers')">
+                            <span class="material-symbols-outlined">people</span>
+                            Customers
+                        </button>
+                        <button class="crm-tab" data-tab="analytics" onclick="switchCRMTab('analytics')">
+                            <span class="material-symbols-outlined">analytics</span>
+                            Analytics
+                        </button>
+                    </div>
 
-                        <!-- CRM Navigation Tabs -->
-                        <div class="crm-tabs">
-                            <button class="crm-tab active" data-tab="dashboard" onclick="switchCRMTab('dashboard')">
-                                <span class="material-symbols-outlined">dashboard</span>
-                                Dashboard
-                            </button>
-                            <button class="crm-tab" data-tab="orders" onclick="switchCRMTab('orders')">
-                                <span class="material-symbols-outlined">shopping_cart</span>
-                                Orders
-                            </button>
-                            <button class="crm-tab" data-tab="customers" onclick="switchCRMTab('customers')">
-                                <span class="material-symbols-outlined">people</span>
-                                Customers
-                            </button>
-                            <button class="crm-tab" data-tab="analytics" onclick="switchCRMTab('analytics')">
-                                <span class="material-symbols-outlined">analytics</span>
-                                Analytics
-                            </button>
-                        </div>
-
-                        <!-- Dashboard Tab -->
-                        <div id="crmDashboard" class="crm-content active">
-                            <div class="crm-stats-grid">
-                                <div class="crm-stat-card">
-                                    <div class="stat-icon">
-                                        <span class="material-symbols-outlined">shopping_cart</span>
-                                    </div>
-                                    <div class="stat-details">
-                                        <h3 id="totalOrders">0</h3>
-                                        <p>Total Orders</p>
-                                    </div>
+                    <!-- Dashboard Tab -->
+                    <div id="crmDashboard" class="crm-content active">
+                        <div class="crm-stats-grid">
+                            <div class="crm-stat-card">
+                                <div class="stat-icon">
+                                    <span class="material-symbols-outlined">shopping_cart</span>
                                 </div>
-                                <div class="crm-stat-card">
-                                    <div class="stat-icon pending">
-                                        <span class="material-symbols-outlined">schedule</span>
-                                    </div>
-                                    <div class="stat-details">
-                                        <h3 id="pendingOrders">0</h3>
-                                        <p>Pending Orders</p>
-                                    </div>
-                                </div>
-                                <div class="crm-stat-card">
-                                    <div class="stat-icon completed">
-                                        <span class="material-symbols-outlined">check_circle</span>
-                                    </div>
-                                    <div class="stat-details">
-                                        <h3 id="completedOrders">0</h3>
-                                        <p>Completed</p>
-                                    </div>
-                                </div>
-                                <div class="crm-stat-card">
-                                    <div class="stat-icon revenue">
-                                        <span class="material-symbols-outlined">currency_rupee</span>
-                                    </div>
-                                    <div class="stat-details">
-                                        <h3 id="totalRevenue">₹0</h3>
-                                        <p>Total Revenue</p>
-                                    </div>
+                                <div class="stat-details">
+                                    <h3 id="totalOrders">0</h3>
+                                    <p>Total Orders</p>
                                 </div>
                             </div>
-
-                            <div class="recent-orders-section">
-                                <h2 class="section-title">Recent Orders</h2>
-                                <div id="recentOrdersTable"></div>
+                            <div class="crm-stat-card">
+                                <div class="stat-icon pending">
+                                    <span class="material-symbols-outlined">schedule</span>
+                                </div>
+                                <div class="stat-details">
+                                    <h3 id="pendingOrders">0</h3>
+                                    <p>Pending Orders</p>
+                                </div>
+                            </div>
+                            <div class="crm-stat-card">
+                                <div class="stat-icon completed">
+                                    <span class="material-symbols-outlined">check_circle</span>
+                                </div>
+                                <div class="stat-details">
+                                    <h3 id="completedOrders">0</h3>
+                                    <p>Completed</p>
+                                </div>
+                            </div>
+                            <div class="crm-stat-card">
+                                <div class="stat-icon revenue">
+                                    <span class="material-symbols-outlined">currency_rupee</span>
+                                </div>
+                                <div class="stat-details">
+                                    <h3 id="totalRevenue">₹0</h3>
+                                    <p>Total Revenue</p>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Orders Tab -->
-                        <div id="crmOrders" class="crm-content">
-                            <div class="crm-section-header">
-                                <h2>All Orders</h2>
-                                <div class="search-box">
-                                    <span class="material-symbols-outlined">search</span>
-                                    <input type="text" id="orderSearch" placeholder="Search orders..." oninput="searchOrders(this.value)">
-                                </div>
-                            </div>
-                            <div id="ordersTableCRM" class="crm-table-container"></div>
+                        <div class="recent-orders-section">
+                            <h2 class="section-title">Recent Orders</h2>
+                            <div id="recentOrdersTable"></div>
                         </div>
+                    </div>
 
-                        <!-- Customers Tab -->
-                        <div id="crmCustomers" class="crm-content">
-                            <div class="crm-section-header">
-                                <h2>All Customers</h2>
-                                <div class="search-box">
-                                    <span class="material-symbols-outlined">search</span>
-                                    <input type="text" id="customerSearch" placeholder="Search customers..." oninput="searchCustomers(this.value)">
-                                </div>
+                    <!-- Orders Tab -->
+                    <div id="crmOrders" class="crm-content">
+                        <div class="crm-section-header">
+                            <h2>All Orders</h2>
+                            <div class="search-box">
+                                <span class="material-symbols-outlined">search</span>
+                                <input type="text" id="orderSearch" placeholder="Search orders..." oninput="searchOrders(this.value)">
                             </div>
-                            <div id="customersTableCRM" class="crm-table-container"></div>
                         </div>
+                        <div id="ordersTableCRM" class="crm-table-container"></div>
+                    </div>
 
-                        <!-- Analytics Tab -->
-                        <div id="crmAnalytics" class="crm-content">
-                            <h2 class="section-title">Sales Analytics</h2>
-                            <div class="analytics-grid">
-                                <div class="analytics-card">
-                                    <h3>Orders by Status</h3>
-                                    <div id="orderStatusChart" class="chart-placeholder">Chart coming soon...</div>
-                                </div>
-                                <div class="analytics-card">
-                                    <h3>Revenue Trend</h3>
-                                    <div id="revenueTrendChart" class="chart-placeholder">Chart coming soon...</div>
-                                </div>
+                    <!-- Customers Tab -->
+                    <div id="crmCustomers" class="crm-content">
+                        <div class="crm-section-header">
+                            <h2>All Customers</h2>
+                            <div class="search-box">
+                                <span class="material-symbols-outlined">search</span>
+                                <input type="text" id="customerSearch" placeholder="Search customers..." oninput="searchCustomers(this.value)">
+                            </div>
+                        </div>
+                        <div id="customersTableCRM" class="crm-table-container"></div>
+                    </div>
+
+                    <!-- Analytics Tab -->
+                    <div id="crmAnalytics" class="crm-content">
+                        <h2 class="section-title">Sales Analytics</h2>
+                        <div class="analytics-grid">
+                            <div class="analytics-card">
+                                <h3>Orders by Status</h3>
+                                <div id="orderStatusChart" class="chart-placeholder">Chart coming soon...</div>
+                            </div>
+                            <div class="analytics-card">
+                                <h3>Revenue Trend</h3>
+                                <div id="revenueTrendChart" class="chart-placeholder">Chart coming soon...</div>
                             </div>
                         </div>
                     </div>
@@ -455,7 +454,7 @@
     </div>
 
     <!-- FOOTER -->
-    <footer class="footer">
+    <footer id="mainFooter" class="footer">
         <div class="container">
             <p>&copy; 2025 BEEYUH. All rights reserved.</p>
         </div>
