@@ -1,9 +1,9 @@
 // ==========================================
-// BEEYUH - Main JavaScript v2.5 Final
+// BEEYUH - Main JavaScript v2.5 FINAL WORKING
 // ==========================================
 
 // Configuration
-const API_URL = 'https://script.google.com/macros/s/AKfycbybFuDG3ldMiyR-X9GNi6GxbrijKKHH9yCTT8VuckYZOrZQFZswNhEwJiUdcCmDdgE/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxOjPXr7ieT9HgyVmv3MdDBt_ouOkY3rQbtZafP2cSFH5qY-7nVngQEVhgp3OiGgafR/exec';
 const MAX_CART_ITEMS = 100;
 
 // Loading messages
@@ -123,7 +123,7 @@ function togglePassword(inputId) {
 }
 
 // ==========================================
-// SEARCHABLE DROPDOWN - FIXED
+// SEARCHABLE DROPDOWN
 // ==========================================
 
 function initializeDropdowns() {
@@ -132,7 +132,6 @@ function initializeDropdowns() {
     populateDropdown('stateDropdown', indianStates);
     populateDropdown('checkoutStateDropdown', indianStates);
     
-    // Close dropdowns when clicking outside
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.searchable-dropdown')) {
             document.querySelectorAll('.dropdown-options').forEach(dropdown => {
@@ -163,7 +162,6 @@ function toggleDropdown(dropdownId) {
     const dropdown = document.getElementById(dropdownId);
     if (!dropdown) return;
     
-    // Close all other dropdowns first
     document.querySelectorAll('.dropdown-options').forEach(d => {
         if (d.id !== dropdownId) {
             d.classList.remove('active');
@@ -336,44 +334,58 @@ function setupAuthTabs() {
 }
 
 // ==========================================
-// API CALLS WITH ERROR HANDLING
+// API CALLS - FIXED FOR GOOGLE APPS SCRIPT
 // ==========================================
 
 async function apiCall(action, data = {}, method = 'GET') {
     try {
-        let url = `${API_URL}?action=${action}&t=${Date.now()}`;
+        let url = API_URL;
         let options = {
-            method: method,
-            redirect: 'follow',
-            mode: 'cors'
+            method: method
         };
         
         if (method === 'POST') {
-            data.action = action;
-            options.body = JSON.stringify(data);
+            const formData = new URLSearchParams();
+            formData.append('action', action);
+            
+            Object.keys(data).forEach(key => {
+                if (typeof data[key] === 'object' && data[key] !== null) {
+                    formData.append(key, JSON.stringify(data[key]));
+                } else {
+                    formData.append(key, data[key]);
+                }
+            });
+            
+            options.body = formData.toString();
             options.headers = {
-                'Content-Type': 'text/plain'
+                'Content-Type': 'application/x-www-form-urlencoded'
             };
         } else {
+            const params = new URLSearchParams();
+            params.append('action', action);
             Object.keys(data).forEach(key => {
-                url += `&${key}=${encodeURIComponent(data[key])}`;
+                params.append(key, data[key]);
             });
+            url = `${API_URL}?${params.toString()}`;
         }
+        
+        console.log('API Call:', action, method);
+        console.log('URL:', url);
         
         const response = await fetch(url, options);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
         const text = await response.text();
+        
+        console.log('Response:', text);
+        
         const result = JSON.parse(text);
         return result;
         
     } catch (error) {
-        console.error('API Call Error:', error);
-        showNotification('Connection error: ' + error.message, 'error', true);
-        return { status: 'error', message: error.message };
+        console.error('API Error:', error);
+        return { 
+            status: 'error', 
+            message: 'Connection error: ' + error.message 
+        };
     }
 }
 
