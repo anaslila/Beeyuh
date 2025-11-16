@@ -1,12 +1,10 @@
 // ==========================================
-// BEEYUH - Main JavaScript v2.5 FINAL WORKING
+// BEEYUH - Main JavaScript v2.6 CRM
 // ==========================================
 
-// Configuration
 const API_URL = 'https://script.google.com/macros/s/AKfycbxOjPXr7ieT9HgyVmv3MdDBt_ouOkY3rQbtZafP2cSFH5qY-7nVngQEVhgp3OiGgafR/exec';
 const MAX_CART_ITEMS = 100;
 
-// Loading messages
 const loadingMessages = [
     'Finding your vibe',
     'Ironing out the T-Shirt',
@@ -20,7 +18,6 @@ const loadingMessages = [
     'Your style is loading'
 ];
 
-// Indian Cities and States Data
 const indianCities = [
     'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Ahmedabad', 'Chennai', 'Kolkata', 'Surat', 'Pune', 'Jaipur',
     'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Thane', 'Bhopal', 'Visakhapatnam', 'Pimpri-Chinchwad', 'Patna',
@@ -42,16 +39,13 @@ const indianStates = [
     'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Jammu and Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry'
 ];
 
-// State management
 let currentUser = null;
 let currentAdmin = null;
 let allOrders = [];
+let allCustomers = [];
 let cart = [];
 let collateralInterval = null;
-
-// ==========================================
-// INITIALIZATION
-// ==========================================
+let currentOrderForInvoice = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
@@ -106,7 +100,7 @@ function hideLoadingScreen() {
 }
 
 // ==========================================
-// PASSWORD VISIBILITY TOGGLE
+// PASSWORD TOGGLE
 // ==========================================
 
 function togglePassword(inputId) {
@@ -123,7 +117,7 @@ function togglePassword(inputId) {
 }
 
 // ==========================================
-// SEARCHABLE DROPDOWN
+// DROPDOWNS
 // ==========================================
 
 function initializeDropdowns() {
@@ -176,7 +170,6 @@ function filterDropdown(dropdownId, searchTerm) {
     if (!dropdown) return;
     
     const options = dropdown.querySelectorAll('.dropdown-option');
-    
     dropdown.classList.add('active');
     
     options.forEach(option => {
@@ -194,7 +187,6 @@ function selectDropdownOption(dropdownId, value) {
     if (!dropdown) return;
     
     const input = dropdown.previousElementSibling;
-    
     input.value = value;
     dropdown.classList.remove('active');
 }
@@ -310,10 +302,6 @@ function navigateTo(page) {
     }
 }
 
-// ==========================================
-// AUTH TABS
-// ==========================================
-
 function setupAuthTabs() {
     const authTabs = document.querySelectorAll('.auth-tab');
     
@@ -334,7 +322,7 @@ function setupAuthTabs() {
 }
 
 // ==========================================
-// API CALLS - FIXED FOR GOOGLE APPS SCRIPT
+// API CALLS
 // ==========================================
 
 async function apiCall(action, data = {}, method = 'GET') {
@@ -370,13 +358,9 @@ async function apiCall(action, data = {}, method = 'GET') {
         }
         
         console.log('API Call:', action, method);
-        console.log('URL:', url);
         
         const response = await fetch(url, options);
         const text = await response.text();
-        
-        console.log('Response:', text);
-        
         const result = JSON.parse(text);
         return result;
         
@@ -390,7 +374,7 @@ async function apiCall(action, data = {}, method = 'GET') {
 }
 
 // ==========================================
-// CUSTOMER AUTHENTICATION
+// CUSTOMER AUTH
 // ==========================================
 
 async function customerLogin() {
@@ -403,9 +387,7 @@ async function customerLogin() {
     }
     
     showLoadingScreen();
-    
     const result = await apiCall('customerLogin', { email, password }, 'POST');
-    
     hideLoadingScreen();
     
     if (result.status === 'success') {
@@ -435,14 +417,7 @@ async function registerCustomer() {
     showLoadingScreen();
     
     const result = await apiCall('registerCustomer', {
-        fullName,
-        email,
-        phone,
-        password,
-        address,
-        city,
-        state,
-        pincode
+        fullName, email, phone, password, address, city, state, pincode
     }, 'POST');
     
     hideLoadingScreen();
@@ -482,7 +457,7 @@ function hideCustomerDashboard() {
 }
 
 // ==========================================
-// ADMIN AUTHENTICATION
+// ADMIN AUTH & CRM
 // ==========================================
 
 async function adminLogin() {
@@ -495,9 +470,7 @@ async function adminLogin() {
     }
     
     showLoadingScreen();
-    
     const result = await apiCall('adminLogin', { email, password }, 'POST');
-    
     hideLoadingScreen();
     
     if (result.status === 'success') {
@@ -511,16 +484,42 @@ async function adminLogin() {
 
 async function showAdminDashboard() {
     document.getElementById('adminLogin').classList.remove('active');
-    
     const dashboard = document.getElementById('adminDashboard');
     dashboard.classList.add('active');
     
     await loadAllOrders();
+    await loadAllCustomers();
+    switchCRMTab('dashboard');
 }
 
 function hideAdminDashboard() {
     document.getElementById('adminDashboard').classList.remove('active');
     document.getElementById('adminLogin').classList.add('active');
+}
+
+// CRM Tab Switching
+function switchCRMTab(tabName) {
+    document.querySelectorAll('.crm-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+    
+    document.querySelectorAll('.crm-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    if (tabName === 'dashboard') {
+        document.getElementById('crmDashboard').classList.add('active');
+        displayRecentOrders();
+    } else if (tabName === 'orders') {
+        document.getElementById('crmOrders').classList.add('active');
+        displayOrdersTable();
+    } else if (tabName === 'customers') {
+        document.getElementById('crmCustomers').classList.add('active');
+        displayCustomersTable();
+    } else if (tabName === 'analytics') {
+        document.getElementById('crmAnalytics').classList.add('active');
+    }
 }
 
 // ==========================================
@@ -529,82 +528,397 @@ function hideAdminDashboard() {
 
 async function loadAllOrders() {
     showLoadingScreen();
-    
     const result = await apiCall('getOrders', { adminId: currentAdmin['Admin ID'] });
-    
     hideLoadingScreen();
     
     if (result.status === 'success') {
         allOrders = result.data;
-        displayOrders();
         updateOrderStats();
     } else {
         showNotification('Failed to load orders', 'error', false);
     }
 }
 
-function displayOrders() {
-    const ordersTable = document.getElementById('ordersTable');
+async function loadAllCustomers() {
+    const result = await apiCall('getAllCustomers', {});
     
-    if (allOrders.length === 0) {
-        ordersTable.innerHTML = '<p>No orders found</p>';
-        return;
+    if (result.status === 'success') {
+        allCustomers = result.data;
     }
-    
-    let html = '';
-    
-    allOrders.forEach(order => {
-        const statusClass = getStatusClass(order['Order Status']);
-        
-        html += `
-            <div class="order-item">
-                <div class="order-header">
-                    <span class="order-id">${order['Order ID']}</span>
-                    <span class="order-status ${statusClass}">${order['Order Status']}</span>
-                </div>
-                <div class="order-details">
-                    <p><strong>Customer:</strong> ${order['Customer Name']}</p>
-                    <p><strong>Email:</strong> ${order['Customer Email']}</p>
-                    <p><strong>Phone:</strong> ${order['Customer Phone']}</p>
-                    <p><strong>Amount:</strong> ₹${order['Total Amount']}</p>
-                    <p><strong>Payment Mode:</strong> ${order['Payment Mode'] || 'COD'}</p>
-                    <p><strong>Order Date:</strong> ${formatDate(order['Order Date'])}</p>
-                    <p><strong>Tracking:</strong> ${order['Tracking Number'] || 'Not assigned'}</p>
-                    <p><strong>Courier:</strong> ${order['Courier Name'] || 'Not assigned'}</p>
-                </div>
-                <div class="order-actions">
-                    <button class="btn btn-primary" onclick="openUpdateModal('${order['Order ID']}')">Update Order</button>
-                </div>
-            </div>
-        `;
-    });
-    
-    ordersTable.innerHTML = html;
 }
 
 function updateOrderStats() {
     const total = allOrders.length;
     const pending = allOrders.filter(o => o['Order Status'] !== 'Delivered' && o['Order Status'] !== 'Cancelled').length;
     const completed = allOrders.filter(o => o['Order Status'] === 'Delivered').length;
+    const revenue = allOrders.reduce((sum, o) => sum + (parseFloat(o['Total Amount']) || 0), 0);
     
     document.getElementById('totalOrders').textContent = total;
     document.getElementById('pendingOrders').textContent = pending;
     document.getElementById('completedOrders').textContent = completed;
+    document.getElementById('totalRevenue').textContent = `₹${revenue.toLocaleString('en-IN')}`;
 }
 
-function getStatusClass(status) {
-    const statusMap = {
-        'Order Placed': 'status-placed',
-        'Processing': 'status-processing',
-        'Dispatched': 'status-dispatched',
-        'Out for Delivery': 'status-dispatched',
-        'Delivered': 'status-delivered',
-        'Cancelled': 'status-cancelled'
-    };
+function displayRecentOrders() {
+    const recentOrders = allOrders.slice(0, 5);
+    displayOrdersInTable('recentOrdersTable', recentOrders);
+}
+
+function displayOrdersTable() {
+    displayOrdersInTable('ordersTableCRM', allOrders);
+}
+
+function displayOrdersInTable(containerId, orders) {
+    const container = document.getElementById(containerId);
     
-    return statusMap[status] || 'status-placed';
+    if (orders.length === 0) {
+        container.innerHTML = '<p>No orders found</p>';
+        return;
+    }
+    
+    let html = `
+        <table class="crm-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    
+    orders.forEach(order => {
+        const statusClass = getStatusClass(order['Order Status']);
+        
+        html += `
+            <tr>
+                <td>
+                    <strong>${order['Order ID']}</strong>
+                    <button class="btn-crm-action btn-copy" onclick="copyOrderId('${order['Order ID']}')" title="Copy Order ID">
+                        <span class="material-symbols-outlined">content_copy</span>
+                    </button>
+                </td>
+                <td>${order['Customer Name']}</td>
+                <td>₹${order['Total Amount']}</td>
+                <td><span class="status-badge ${statusClass}">${order['Order Status']}</span></td>
+                <td>${formatDate(order['Order Date'])}</td>
+                <td>
+                    <div class="order-actions-crm">
+                        <button class="btn-crm-action btn-view" onclick="openUpdateModal('${order['Order ID']}')" title="Update Order">
+                            <span class="material-symbols-outlined">edit</span>
+                        </button>
+                        <button class="btn-crm-action btn-whatsapp" onclick="sendWhatsAppUpdate('${order['Order ID']}')" title="WhatsApp">
+                            <span class="material-symbols-outlined">chat</span>
+                        </button>
+                        <button class="btn-crm-action btn-invoice" onclick="openInvoiceModal('${order['Order ID']}')" title="Invoice">
+                            <span class="material-symbols-outlined">receipt</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += `
+            </tbody>
+        </table>
+    `;
+    
+    container.innerHTML = html;
 }
 
+function displayCustomersTable() {
+    const container = document.getElementById('customersTableCRM');
+    
+    if (allCustomers.length === 0) {
+        container.innerHTML = '<p>No customers found</p>';
+        return;
+    }
+    
+    let html = `
+        <table class="crm-table">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>City</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    
+    allCustomers.forEach(customer => {
+        html += `
+            <tr>
+                <td><strong>${customer['Customer ID']}</strong></td>
+                <td>${customer['Full Name']}</td>
+                <td>${customer.Email}</td>
+                <td>${customer.Phone}</td>
+                <td>${customer.City || 'N/A'}</td>
+                <td><span class="status-badge status-delivered">${customer.Status}</span></td>
+            </tr>
+        `;
+    });
+    
+    html += `
+            </tbody>
+        </table>
+    `;
+    
+    container.innerHTML = html;
+}
+
+// ==========================================
+// COPY ORDER ID
+// ==========================================
+
+function copyOrderId(orderId) {
+    navigator.clipboard.writeText(orderId).then(() => {
+        showNotification('Order ID copied to clipboard!', 'success', true);
+    }).catch(err => {
+        showNotification('Failed to copy Order ID', 'error', true);
+    });
+}
+
+// ==========================================
+// WHATSAPP INTEGRATION
+// ==========================================
+
+function sendWhatsAppUpdate(orderId) {
+    const order = allOrders.find(o => o['Order ID'] === orderId);
+    if (!order) return;
+    
+    const phone = order['Customer Phone'].replace(/[^0-9]/g, '');
+    const message = `Hello ${order['Customer Name']}! 👋\n\n` +
+                   `Your BEEYUH order has been updated:\n\n` +
+                   `📦 *Order ID:* ${order['Order ID']}\n` +
+                   `📍 *Status:* ${order['Order Status']}\n` +
+                   `💰 *Amount:* ₹${order['Total Amount']}\n` +
+                   `${order['Tracking Number'] ? `🚚 *Tracking:* ${order['Tracking Number']}\n` : ''}` +
+                   `${order['Courier Name'] ? `📮 *Courier:* ${order['Courier Name']}\n` : ''}` +
+                   `${order['Expected Delivery'] ? `📅 *Expected Delivery:* ${formatDate(order['Expected Delivery'])}\n` : ''}` +
+                   `\nThank you for shopping with BEEYUH! 🛍️`;
+    
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappURL = `https://wa.me/91${phone}?text=${encodedMessage}`;
+    
+    window.open(whatsappURL, '_blank');
+}
+
+// ==========================================
+// INVOICE GENERATION
+// ==========================================
+
+function openInvoiceModal(orderId) {
+    const order = allOrders.find(o => o['Order ID'] === orderId);
+    if (!order) return;
+    
+    currentOrderForInvoice = order;
+    document.getElementById('invoiceModal').classList.add('active');
+    
+    generateInvoicePreview(order);
+}
+
+function closeInvoiceModal() {
+    document.getElementById('invoiceModal').classList.remove('active');
+    currentOrderForInvoice = null;
+}
+
+function generateInvoicePreview(order) {
+    const preview = document.getElementById('invoicePreview');
+    
+    let items = [];
+    try {
+        items = JSON.parse(order['Items']);
+    } catch(e) {
+        items = [];
+    }
+    
+    let html = `
+        <div style="padding: 20px; font-family: 'Open Sans', sans-serif;">
+            <h2 style="text-align: center; margin-bottom: 30px;">BEEYUH INVOICE</h2>
+            <div style="margin-bottom: 20px;">
+                <p><strong>Order ID:</strong> ${order['Order ID']}</p>
+                <p><strong>Date:</strong> ${formatDate(order['Order Date'])}</p>
+                <p><strong>Customer:</strong> ${order['Customer Name']}</p>
+                <p><strong>Phone:</strong> ${order['Customer Phone']}</p>
+                <p><strong>Address:</strong> ${order['Shipping Address']}, ${order.City}, ${order.State} - ${order.Pincode}</p>
+            </div>
+            <hr>
+            <h3>Order Items:</h3>
+            <ul>
+    `;
+    
+    items.forEach(item => {
+        html += `<li>${item.name} (${item.size}) x ${item.quantity} = ₹${item.price * item.quantity}</li>`;
+    });
+    
+    html += `
+            </ul>
+            <hr>
+            <h3 style="text-align: right;">Total: ₹${order['Total Amount']}</h3>
+        </div>
+    `;
+    
+    preview.innerHTML = html;
+}
+
+function generatePDFInvoice() {
+    if (!currentOrderForInvoice) return;
+    
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    const order = currentOrderForInvoice;
+    
+    doc.setFontSize(20);
+    doc.text('BEEYUH INVOICE', 105, 20, { align: 'center' });
+    
+    doc.setFontSize(12);
+    doc.text(`Order ID: ${order['Order ID']}`, 20, 40);
+    doc.text(`Date: ${formatDate(order['Order Date'])}`, 20, 50);
+    doc.text(`Customer: ${order['Customer Name']}`, 20, 60);
+    doc.text(`Phone: ${order['Customer Phone']}`, 20, 70);
+    doc.text(`Address: ${order['Shipping Address']}`, 20, 80);
+    doc.text(`${order.City}, ${order.State} - ${order.Pincode}`, 20, 90);
+    
+    doc.line(20, 100, 190, 100);
+    
+    doc.text('Order Items:', 20, 110);
+    
+    let items = [];
+    try {
+        items = JSON.parse(order['Items']);
+    } catch(e) {}
+    
+    let yPos = 120;
+    items.forEach(item => {
+        doc.text(`${item.name} (${item.size}) x ${item.quantity} = Rs.${item.price * item.quantity}`, 20, yPos);
+        yPos += 10;
+    });
+    
+    doc.line(20, yPos, 190, yPos);
+    yPos += 10;
+    doc.setFontSize(14);
+    doc.text(`Total: Rs.${order['Total Amount']}`, 150, yPos);
+    
+    doc.save(`BEEYUH_Invoice_${order['Order ID']}.pdf`);
+    showNotification('Invoice PDF downloaded!', 'success', true);
+}
+
+function printInvoice() {
+    const preview = document.getElementById('invoicePreview');
+    const printWindow = window.open('', '', 'height=600,width=800');
+    printWindow.document.write('<html><head><title>Invoice</title>');
+    printWindow.document.write('<style>body{font-family: "Open Sans", sans-serif; padding: 20px;}</style>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(preview.innerHTML);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+}
+
+function emailInvoice() {
+    if (!currentOrderForInvoice) return;
+    
+    const order = currentOrderForInvoice;
+    const subject = `BEEYUH Invoice - ${order['Order ID']}`;
+    const body = `Dear ${order['Customer Name']},\n\nPlease find your invoice details below:\n\nOrder ID: ${order['Order ID']}\nTotal Amount: ₹${order['Total Amount']}\n\nThank you for shopping with BEEYUH!`;
+    
+    window.location.href = `mailto:${order['Customer Email']}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+function whatsappInvoice() {
+    if (!currentOrderForInvoice) return;
+    
+    const order = currentOrderForInvoice;
+    const phone = order['Customer Phone'].replace(/[^0-9]/g, '');
+    const message = `🧾 *BEEYUH INVOICE*\n\n` +
+                   `Order ID: ${order['Order ID']}\n` +
+                   `Date: ${formatDate(order['Order Date'])}\n` +
+                   `Customer: ${order['Customer Name']}\n` +
+                   `Total Amount: ₹${order['Total Amount']}\n\n` +
+                   `Thank you for shopping with BEEYUH! 🛍️`;
+    
+    const whatsappURL = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, '_blank');
+}
+
+// ==========================================
+// SEARCH FUNCTIONS
+// ==========================================
+
+function searchOrders(searchTerm) {
+    if (!searchTerm) {
+        displayOrdersTable();
+        return;
+    }
+    
+    const filtered = allOrders.filter(order => {
+        return order['Order ID'].toLowerCase().includes(searchTerm.toLowerCase()) ||
+               order['Customer Name'].toLowerCase().includes(searchTerm.toLowerCase()) ||
+               order['Customer Email'].toLowerCase().includes(searchTerm.toLowerCase()) ||
+               order['Order Status'].toLowerCase().includes(searchTerm.toLowerCase());
+    });
+    
+    displayOrdersInTable('ordersTableCRM', filtered);
+}
+
+function searchCustomers(searchTerm) {
+    if (!searchTerm) {
+        displayCustomersTable();
+        return;
+    }
+    
+    const filtered = allCustomers.filter(customer => {
+        return customer['Customer ID'].toLowerCase().includes(searchTerm.toLowerCase()) ||
+               customer['Full Name'].toLowerCase().includes(searchTerm.toLowerCase()) ||
+               customer.Email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+               customer.Phone.includes(searchTerm);
+    });
+    
+    const container = document.getElementById('customersTableCRM');
+    
+    let html = `
+        <table class="crm-table">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>City</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    
+    filtered.forEach(customer => {
+        html += `
+            <tr>
+                <td><strong>${customer['Customer ID']}</strong></td>
+                <td>${customer['Full Name']}</td>
+                <td>${customer.Email}</td>
+                <td>${customer.Phone}</td>
+                <td>${customer.City || 'N/A'}</td>
+                <td><span class="status-badge status-delivered">${customer.Status}</span></td>
+            </tr>
+        `;
+    });
+    
+    html += `</tbody></table>`;
+    container.innerHTML = html;
+}
+
+// Continuing in next message due to character limit...
 // ==========================================
 // ORDER UPDATE MODAL
 // ==========================================
@@ -659,6 +973,7 @@ async function submitOrderUpdate() {
         showNotification('Order updated successfully!', 'success', true);
         closeUpdateModal();
         await loadAllOrders();
+        displayOrdersTable();
     } else {
         showNotification(result.message || 'Update failed', 'error', true);
     }
@@ -1014,9 +1329,27 @@ function createProductCard(product) {
     `;
 }
 
+function getProductById(productId) {
+    if (typeof products === 'undefined') return null;
+    return products.find(p => p.id === productId);
+}
+
 // ==========================================
 // UTILITY FUNCTIONS
 // ==========================================
+
+function getStatusClass(status) {
+    const statusMap = {
+        'Order Placed': 'status-placed',
+        'Processing': 'status-processing',
+        'Dispatched': 'status-dispatched',
+        'Out for Delivery': 'status-dispatched',
+        'Delivered': 'status-delivered',
+        'Cancelled': 'status-cancelled'
+    };
+    
+    return statusMap[status] || 'status-placed';
+}
 
 function showNotification(message, type = 'info', showIcon = false) {
     const notification = document.createElement('div');
